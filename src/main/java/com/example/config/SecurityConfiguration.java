@@ -15,11 +15,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 import java.io.IOException;
 
 @Configuration
@@ -28,8 +34,11 @@ public class SecurityConfiguration {
     @Resource
     AuthorizeService authorizeService;
 
+    @Resource
+    DataSource dataSource;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,PersistentTokenRepository tokenRepository) throws Exception {
         return http
                 .authorizeHttpRequests()
                 .anyRequest().authenticated()
@@ -41,9 +50,18 @@ public class SecurityConfiguration {
                 .and()
                 .logout()
                 .logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler(this::logoutSuccess)
+                .and()
+                .rememberMe()
+                .rememberMeParameter("remember")
+                .tokenRepository(tokenRepository())
+                .tokenValiditySeconds(3600 * 24 * 7)
                 .and()
                 .csrf()
                 .disable()
+                .cors()
+                .configurationSource(this.corsConfigurationSource())
+                .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(this::onAuthenticationFailure)
                 .and()
@@ -51,6 +69,24 @@ public class SecurityConfiguration {
 
 
 
+    }
+    @Bean
+    public PersistentTokenRepository tokenRepository(){
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        jdbcTokenRepository.setCreateTableOnStartup(true);
+        return jdbcTokenRepository;
+    }
+    private CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addExposedHeader("*");
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**",corsConfiguration);
+        return urlBasedCorsConfigurationSource;
     }
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity security) throws Exception {
@@ -63,12 +99,19 @@ public class SecurityConfiguration {
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.success("登陆成功")));
     }
+
     public  void  onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.failure(401,exception.getMessage())));
+    }
+
+    public void logoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(JSONObject.toJSONString(RestBean.success("退出登录")));
     }
 }
