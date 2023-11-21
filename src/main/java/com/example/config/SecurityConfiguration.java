@@ -54,7 +54,7 @@ public class SecurityConfiguration {
                 .and()
                 .rememberMe()
                 .rememberMeParameter("remember")
-                .tokenRepository(tokenRepository())
+                .tokenRepository(tokenRepository)
                 .tokenValiditySeconds(3600 * 24 * 7)
                 .and()
                 .csrf()
@@ -74,7 +74,7 @@ public class SecurityConfiguration {
     public PersistentTokenRepository tokenRepository(){
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
-        jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
     private CorsConfigurationSource corsConfigurationSource(){
