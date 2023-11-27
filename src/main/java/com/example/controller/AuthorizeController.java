@@ -24,7 +24,7 @@ public class AuthorizeController {
 
     @PostMapping("/valid-email")
     public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("email") String email , HttpSession session){
-        String s = service.sendValidateEmail(email, session.getId());
+        String s = service.sendValidateEmail(email);
         if(s == null)
             return RestBean.success("邮件已发送，请注意查收");
         else
@@ -36,7 +36,7 @@ public class AuthorizeController {
                                          @Length(min = 6,max = 16)@RequestParam("password") String password,
                                          @Pattern(regexp = EMAIL_REGEX)@RequestParam("email") String email,
                                          @Length(min = 6,max = 6)@RequestParam("code") String code, HttpSession session){
-        String s = service.validateAndRegister(username, password, email, code, session.getId());
+        String s = service.validateAndRegister(username, password, email, code);
         if(s == null){
             return RestBean.success("注册成功");
         }else {
