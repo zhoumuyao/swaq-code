@@ -84,7 +84,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public String validateAndRegister(String username,String password,String email,String code){
-        String key = "email"  +":" +email;
+        String key = "email"  +": " +email;
         if(Boolean.TRUE.equals(template.hasKey(key))){
             String s = template.opsForValue().get(key);
             if(s == null){
