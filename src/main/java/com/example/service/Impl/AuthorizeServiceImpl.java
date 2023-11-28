@@ -53,8 +53,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     }
 
     @Override
-    public String sendValidateEmail(String email){
-        String key = "email" + ": " +email;
+    public String sendValidateEmail(String email,String sessionId){
+        String key = "email" + ": " +email+" "+sessionId;
         System.out.println(key);
         if(Boolean.TRUE.equals(template.hasKey(key))){
             Long expire = Optional.ofNullable(template.getExpire(key,TimeUnit.SECONDS)).orElse(0L);
@@ -83,8 +83,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     }
 
     @Override
-    public String validateAndRegister(String username,String password,String email,String code){
-        String key = "email"  +": " +email;
+    public String validateAndRegister(String username,String password,String email,String code,String sessionId){
+        String key = "email"  +": " +email+" "+sessionId;
         if(Boolean.TRUE.equals(template.hasKey(key))){
             String s = template.opsForValue().get(key);
             if(s == null){
