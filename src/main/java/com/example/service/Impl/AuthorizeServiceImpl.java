@@ -3,6 +3,7 @@ package com.example.service.Impl;
 import com.example.entity.Account;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
@@ -53,8 +54,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     }
 
     @Override
-    public String sendValidateEmail(String email,String sessionId){
-        String key = "email" + ": " +email+" "+sessionId;
+    public String sendValidateEmail(String email,String sessionId,boolean hasAccount){
+        String key = "email" + ": " +email+" "+sessionId+":"+hasAccount;
         System.out.println(key);
         if(Boolean.TRUE.equals(template.hasKey(key))){
             Long expire = Optional.ofNullable(template.getExpire(key,TimeUnit.SECONDS)).orElse(0L);
@@ -62,7 +63,11 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                 return "请求频繁，请稍后再试！";
             }
         }
-        if(userMapper.findAccountByNameOrEmail(email) != null){
+        Account account = userMapper.findAccountByNameOrEmail(email);
+        if(account == null && hasAccount){
+            return "此邮箱未被注册";
+        }
+        if(account != null && !hasAccount){
             return "此邮箱已被注册";
         }
         Random random = new Random();
@@ -84,13 +89,19 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public String validateAndRegister(String username,String password,String email,String code,String sessionId){
-        String key = "email"  +": " +email+" "+sessionId;
+        String key = "email"  +": " +email+" "+sessionId+":false";
         if(Boolean.TRUE.equals(template.hasKey(key))){
             String s = template.opsForValue().get(key);
             if(s == null){
                 return "验证码失效，请重新获取";
             }
             if (s.equals(code)){
+                Account account = userMapper.findAccountByNameOrEmail(username);
+                System.out.println("11111111");
+                if(account != null){
+                    return "该用户名已被注册";
+                }
+                template.delete(key);
                 password = encoder.encode(password);
                 if(userMapper.createAccount(username,password,email) > 0){
                     return null;
@@ -103,5 +114,30 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         }else {
             return "请先获取验证码";
         }
+    }
+
+    @Override
+    public String validateOnly (String email,String code,String sessionId){
+        String key = "email"  +": " +email+" "+sessionId+":true";
+        if(Boolean.TRUE.equals(template.hasKey(key))){
+            String s = template.opsForValue().get(key);
+            if(s == null){
+                return "验证码失效，请重新获取";
+            }
+            if (s.equals(code)){
+                template.delete(key);
+                return null;
+            }else {
+                return "验证码错误，请检查后再提交!";
+            }
+        }else {
+            return "请先获取验证码";
+        }
+    }
+
+    @Override
+    public boolean resetPassword(String password,String email){
+        password = encoder.encode(password);
+        return userMapper.resetPasswordByEmail(password,email) > 0;
     }
 }
