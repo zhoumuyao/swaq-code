@@ -1,9 +1,8 @@
 package com.example.service.Impl;
 
-import com.example.entity.Account;
+import com.example.entity.auth.Account;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
@@ -11,11 +10,9 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 import java.util.Optional;
@@ -97,7 +94,6 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             }
             if (s.equals(code)){
                 Account account = userMapper.findAccountByNameOrEmail(username);
-                System.out.println("11111111");
                 if(account != null){
                     return "该用户名已被注册";
                 }
