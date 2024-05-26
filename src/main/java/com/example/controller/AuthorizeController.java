@@ -1,17 +1,16 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
+
 import com.example.service.AuthorizeService;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
+
 @Validated
 @RestController
 @RequestMapping("/api/auth")
@@ -79,4 +78,5 @@ public class AuthorizeController {
             return RestBean.failure(500,"内部错误，请联系管理员");
         }
     }
+
 }

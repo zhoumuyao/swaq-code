@@ -5,6 +5,10 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.data.redis.core.StringRedisTemplate;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Mapper
 public interface UserMapper {
@@ -15,4 +19,5 @@ public interface UserMapper {
 
     @Update("update db_account set password = #{password} where email = #{email}")
     int resetPasswordByEmail(String password,String email);
+
 }

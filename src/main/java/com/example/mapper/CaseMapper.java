@@ -1,0 +1,19 @@
+package com.example.mapper;
+
+import com.example.entity.BiologicalCase;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
+
+@Mapper
+public interface CaseMapper {
+
+    @Insert("insert into db_case (date, time, longitude, latitude, country, province, urban, description) " +
+            "values (#{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    int createCase(BiologicalCase biologicalCase);
+
+    @Select("SELECT * from db_case where id = #{id}")
+    BiologicalCase selectCase(int id);
+}
