@@ -16,12 +16,12 @@ public class RiskServiceImpl implements RiskService {
     @Resource
     RiskMapper mapper;
     @Override
-    public String createPlan(RiskPlan riskPlan) {
+    public String createPlan(Risk riskPlan) {
         if(riskPlan == null){
             return null;
         }
         if(mapper.createPlan(riskPlan) <= 0){
-            return "添加失败";
+            return null;
         }
         //mapper.addPerson(riskPlan.getId(), riskPlan.getPerson().e.getId());
         //mapper.addEquipment(riskPlan.getId(), riskPlan.getEquipment().getId());
@@ -29,18 +29,60 @@ public class RiskServiceImpl implements RiskService {
     }
 
     @Override
-    public String updatePlan(RiskPlan riskPlan) {
+    public String updatePlan(Risk riskPlan) {
         if(riskPlan == null){
             return null;
         }
         if(mapper.updatePlan(riskPlan) <= 0){
-            return "修改失败";
+            return null;
         }
         return "修改成功";
     }
 
     @Override
-    public String updateRiskIdentification(RiskIdentification riskIdentification) {
+    public String addRiskPerson(int id, int[] persons) {
+        if(persons.length == 0){
+            return null;
+        }
+        for (int person : persons) {
+            if(mapper.addRiskPerson(id, person) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String addRiskEquipment(int id, int[] equipments) {
+        if(equipments.length == 0){
+            return null;
+        }
+        for (int equipment : equipments) {
+            if(mapper.addRiskEquipment(id, equipment) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String deleteRiskPerson(int id) {
+        if(mapper.deletePerson(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public String deleteRiskEquipment(int id) {
+        if(mapper.deleteRiskEquipment(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public String updateRiskIdentification(Risk riskIdentification) {
         if(riskIdentification == null){
             return null;
         }
@@ -51,7 +93,17 @@ public class RiskServiceImpl implements RiskService {
     }
 
     @Override
-    public RiskPlan selectRiskPlan(int id) {
+    public int[] selectRiskPerson(int id) {
+        return mapper.selectRiskPerson(id);
+    }
+
+    @Override
+    public int[] selectRiskEquipment(int id) {
+        return mapper.selectRiskEquipment(id);
+    }
+
+    @Override
+    public Risk selectRiskPlan(int id) {
         if(id < 0){
             return null;
         }

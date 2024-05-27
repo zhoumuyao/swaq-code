@@ -5,13 +5,25 @@ import com.example.entity.*;
 import java.util.List;
 
 public interface RiskService {
-    String createPlan(RiskPlan riskPlan);
+    String createPlan(Risk riskPlan);
 
-    String updatePlan(RiskPlan riskPlan);
+    String updatePlan(Risk riskPlan);
 
-    String updateRiskIdentification(RiskIdentification riskIdentification);
+    String addRiskPerson(int id, int[] persons);
 
-    RiskPlan selectRiskPlan(int id);
+    String addRiskEquipment(int id, int[] equipments);
+
+    String deleteRiskPerson(int id);
+
+    String deleteRiskEquipment(int id);
+
+    String updateRiskIdentification(Risk riskIdentification);
+
+    int[] selectRiskPerson(int id);
+
+    int[] selectRiskEquipment(int id);
+
+    Risk selectRiskPlan(int id);
 
     List<Person> searchPersonList(Person person);
 
