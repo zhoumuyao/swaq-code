@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Validated
 @RestController
@@ -50,5 +51,12 @@ public class CaseController {
     public RestBean<BiologicalCase> searchCase(@RequestParam int id){
         BiologicalCase biologicalCase = service.selectCase(id);
         return RestBean.success(biologicalCase);
+    }
+
+    @PostMapping("/view_case")
+    public RestBean<List<BiologicalCase>> searchAllCase(){
+        //调用service查询案例数据
+        List<BiologicalCase> biologicalCaseList = service.searchAllCase();
+        return RestBean.success(biologicalCaseList);
     }
 }

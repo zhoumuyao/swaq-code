@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class CaseServiceImpl implements CaseService {
@@ -34,6 +35,11 @@ public class CaseServiceImpl implements CaseService {
             return null;
         }
         return caseMapper.selectCase(id);
+    }
+
+    @Override
+    public List<BiologicalCase> searchAllCase() {
+        return caseMapper.searchAllCase();
     }
 
 

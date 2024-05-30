@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface CaseMapper {
 
@@ -16,4 +18,8 @@ public interface CaseMapper {
 
     @Select("SELECT * from db_case where id = #{id}")
     BiologicalCase selectCase(int id);
+
+    //查询全部部门数据
+    @Select("select * from db_case")
+    List<BiologicalCase> searchAllCase();
 }
