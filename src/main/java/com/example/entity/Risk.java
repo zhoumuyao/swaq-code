@@ -11,8 +11,8 @@ public class Risk {
     int id;
     LocalDate date;
     LocalTime time;
-    int longitude;
-    int latitude;
+    double longitude;
+    double latitude;
     String country;
     String province;
     String urban;

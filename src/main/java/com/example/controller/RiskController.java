@@ -40,8 +40,8 @@ public class RiskController {
         riskPlan.setId(id);
         riskPlan.setDate(LocalDate.parse(date));
         riskPlan.setTime(LocalTime.parse(time));
-        riskPlan.setLongitude(Integer.parseInt(longitude));
-        riskPlan.setLatitude(Integer.parseInt(latitude));
+        riskPlan.setLongitude(Double.parseDouble(longitude));
+        riskPlan.setLatitude(Double.parseDouble(latitude));
         riskPlan.setCountry(country);
         riskPlan.setProvince(province);
         riskPlan.setUrban(urban);
@@ -90,6 +90,11 @@ public class RiskController {
             return RestBean.success(s);
         }
     }
+
+//    @PostMapping("/show_somePlan")
+//    public RestBean<BiologicalCase> showSomePlan(@RequestParam int id){
+//        BiologicalCase
+//    }
 
     @PostMapping("/add_riskPerson")
     public RestBean<String> addRiskPerson( @RequestParam int id,

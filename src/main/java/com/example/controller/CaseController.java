@@ -34,8 +34,8 @@ public class CaseController {
         BiologicalCase biologicalCase = new BiologicalCase();
         biologicalCase.setDate(LocalDate.parse(date));
         biologicalCase.setTime(LocalTime.parse(time));
-        biologicalCase.setLongitude(Integer.parseInt(longitude));
-        biologicalCase.setLatitude(Integer.parseInt(latitude));
+        biologicalCase.setLongitude(Double.parseDouble(longitude));
+        biologicalCase.setLatitude(Double.parseDouble(latitude));
         biologicalCase.setCountry(country);
         biologicalCase.setProvince(province);
         biologicalCase.setUrban(urban);
@@ -44,7 +44,7 @@ public class CaseController {
         if(id == -1){
             return RestBean.failure(400, id);
         }
-        return RestBean.success(id);
+        return RestBean.success  (id);
     }
 
     @PostMapping("/search_case")
