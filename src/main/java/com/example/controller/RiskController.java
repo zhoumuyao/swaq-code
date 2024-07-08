@@ -31,7 +31,6 @@ public class RiskController {
                                         @RequestParam String urban,
                                         @RequestParam String description,
                                         @RequestParam int type,
-                                        @RequestParam String method,
                                         @RequestParam boolean isUpdate){
         if(StringUtils.isAnyBlank(date, time, latitude, longitude, country, province, urban, description) || type < 0 || id < 0 ) {
             return RestBean.failure(400, "请完成填写所有参数");
@@ -47,7 +46,6 @@ public class RiskController {
         riskPlan.setUrban(urban);
         riskPlan.setDescription(description);
         riskPlan.setType(type);
-        riskPlan.setMethod(Integer.parseInt(method));
         String s;
         if(isUpdate){
             s = service.updatePlan(riskPlan);

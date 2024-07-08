@@ -7,12 +7,12 @@ import java.util.List;
 
 @Mapper
 public interface RiskMapper {
-    @Insert("insert into db_risk (id, date, time, longitude, latitude, country, province, urban, description, type, method) " +
-            "values (#{id}, #{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{type}, #{method})")
+    @Insert("insert into db_risk (id, date, time, longitude, latitude, country, province, urban, description, type) " +
+            "values (#{id}, #{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{type})")
     int createPlan(Risk riskPlan);
 
     @Update("update db_risk set date = #{date}, time = #{time}, longitude = #{longitude}, latitude = #{latitude}, country = #{country}, province = #{province}, "
-            + "urban = #{urban}, description = #{description}, type = #{type}, method = #{method} where id = #{id}")
+            + "urban = #{urban}, description = #{description}, type = #{type} where id = #{id}")
     int updatePlan(Risk riskPlan);
 
     @Update("update db_risk set object_class = #{objectClass}, sample_type = #{sampleType}, sample_content = #{sampleContent}, test_method = #{testMethod}, "+

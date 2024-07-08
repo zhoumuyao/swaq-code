@@ -18,7 +18,6 @@ public class Risk {
     String urban;
     String description;
     int type;
-    int method;
     int objectClass;
     int sampleType;
     String sampleContent;
