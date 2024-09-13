@@ -64,32 +64,32 @@ public class RiskController {
 
     }
 
-    @PostMapping("/update_riskIdentification")
-    public RestBean<String> updateRiskIdentification (@RequestParam int id,
-                                                      @RequestParam int objectClass,
-                                                      @RequestParam int sampleType,
-                                                      @RequestParam String sampleContent,
-                                                      @RequestParam int testMethod,
-                                                      @RequestParam String sampleRequirement
-    ){
-        if(StringUtils.isAnyBlank(sampleRequirement, sampleContent) || testMethod < 0 || sampleType < 0 || objectClass < 0) {
-            return RestBean.failure(400, "请完成填写所有参数");
-        }
-        Risk riskIdentification = new Risk();
-        riskIdentification.setId(id);
-        riskIdentification.setSampleType(sampleType);
-        riskIdentification.setSampleContent(sampleContent);
-        riskIdentification.setTestMethod(testMethod);
-        riskIdentification.setSampleRequirement(sampleRequirement);
-        riskIdentification.setObjectClass(objectClass);
-        String s = service.updateRiskIdentification(riskIdentification);
-        if(s == null){
-            return RestBean.failure(400, "参数错误");
-        }
-        else{
-            return RestBean.success(s);
-        }
-    }
+//    @PostMapping("/update_riskIdentification")
+//    public RestBean<String> updateRiskIdentification (@RequestParam int id,
+//                                                      @RequestParam int objectClass,
+//                                                      @RequestParam int sampleType,
+//                                                      @RequestParam String sampleContent,
+//                                                      @RequestParam int testMethod,
+//                                                      @RequestParam String sampleRequirement
+//    ){
+//        if(StringUtils.isAnyBlank(sampleRequirement, sampleContent) || testMethod < 0 || sampleType < 0 || objectClass < 0) {
+//            return RestBean.failure(400, "请完成填写所有参数");
+//        }
+//        Risk riskIdentification = new Risk();
+//        riskIdentification.setId(id);
+//        riskIdentification.setSampleType(sampleType);
+//        riskIdentification.setSampleContent(sampleContent);
+//        riskIdentification.setTestMethod(testMethod);
+//        riskIdentification.setSampleRequirement(sampleRequirement);
+//        riskIdentification.setObjectClass(objectClass);
+//        String s = service.updateRiskIdentification(riskIdentification);
+//        if(s == null){
+//            return RestBean.failure(400, "参数错误");
+//        }
+//        else{
+//            return RestBean.success(s);
+//        }
+//    }
 
 //    @PostMapping("/show_somePlan")
 //    public RestBean<BiologicalCase> showSomePlan(@RequestParam int id){

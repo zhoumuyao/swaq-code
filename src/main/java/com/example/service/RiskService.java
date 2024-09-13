@@ -21,7 +21,7 @@ public interface RiskService {
 
     String deleteRiskEquipment(int id);
 
-    String updateRiskIdentification(Risk riskIdentification);
+//    String updateRiskIdentification(Risk riskIdentification);
 
     int[] selectRiskPerson(int id);
 

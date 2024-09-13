@@ -15,9 +15,9 @@ public interface RiskMapper {
             + "urban = #{urban}, description = #{description}, type = #{type}, objectDescription=#{objectDescription} where id = #{id}")
     int updatePlan(Risk riskPlan);
 
-    @Update("update db_risk set object_class = #{objectClass}, sample_type = #{sampleType}, sample_content = #{sampleContent}, test_method = #{testMethod}, "+
-            "sample_requirement = #{sampleRequirement} where id = #{id}")
-    int updateRiskIdentification(Risk riskIdentification);
+//    @Update("update db_risk set object_class = #{objectClass}, sample_type = #{sampleType}, sample_content = #{sampleContent}, test_method = #{testMethod}, "+
+//            "sample_requirement = #{sampleRequirement} where id = #{id}")
+//    int updateRiskIdentification(Risk riskIdentification);
 
     @Insert("insert into db_person (id, name) values (#{id},#{name})")
     int addNewriskPerson(int id,String name);

@@ -100,16 +100,16 @@ public class RiskServiceImpl implements RiskService {
         return "删除成功";
     }
 
-    @Override
-    public String updateRiskIdentification(Risk riskIdentification) {
-        if(riskIdentification == null){
-            return null;
-        }
-        if(mapper.updateRiskIdentification(riskIdentification) <= 0){
-            return "修改失败";
-        }
-        return "修改成功";
-    }
+//    @Override
+//    public String updateRiskIdentification(Risk riskIdentification) {
+//        if(riskIdentification == null){
+//            return null;
+//        }
+//        if(mapper.updateRiskIdentification(riskIdentification) <= 0){
+//            return "修改失败";
+//        }
+//        return "修改成功";
+//    }
 
     @Override
     public int[] selectRiskPerson(int id) {
