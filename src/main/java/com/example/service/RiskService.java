@@ -9,9 +9,13 @@ public interface RiskService {
 
     String updatePlan(Risk riskPlan);
 
+    String addNewriskPerson(int id,String name);
+
     String addRiskPerson(int id, int[] persons);
 
     String addRiskEquipment(int id, int[] equipments);
+
+    String addNewEquipment(Equipment equipment);
 
     String deleteRiskPerson(int id);
 

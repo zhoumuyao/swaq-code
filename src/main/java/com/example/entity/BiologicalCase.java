@@ -18,6 +18,7 @@ public class BiologicalCase {
     String urban;
     String description;
 
+
     public BiologicalCase() {
     }
 

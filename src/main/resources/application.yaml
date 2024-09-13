@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.10.84.125:6306/swaq?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/biosafety?useUnicode=true&characterEncoding=utf-8
     username: root
-    password: root
+    password: hu081220
   mail:
     host: smtp.163.com
     username: ntzhouchi@163.com

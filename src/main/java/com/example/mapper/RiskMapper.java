@@ -7,20 +7,26 @@ import java.util.List;
 
 @Mapper
 public interface RiskMapper {
-    @Insert("insert into db_risk (id, date, time, longitude, latitude, country, province, urban, description, type) " +
-            "values (#{id}, #{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{type})")
+    @Insert("insert into db_risk (id, date, time, longitude, latitude, country, province, urban, description, type, objectDescription) " +
+            "values (#{id}, #{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{type}, #{objectDescription})")
     int createPlan(Risk riskPlan);
 
     @Update("update db_risk set date = #{date}, time = #{time}, longitude = #{longitude}, latitude = #{latitude}, country = #{country}, province = #{province}, "
-            + "urban = #{urban}, description = #{description}, type = #{type} where id = #{id}")
+            + "urban = #{urban}, description = #{description}, type = #{type}, objectDescription=#{objectDescription} where id = #{id}")
     int updatePlan(Risk riskPlan);
 
     @Update("update db_risk set object_class = #{objectClass}, sample_type = #{sampleType}, sample_content = #{sampleContent}, test_method = #{testMethod}, "+
             "sample_requirement = #{sampleRequirement} where id = #{id}")
     int updateRiskIdentification(Risk riskIdentification);
 
+    @Insert("insert into db_person (id, name) values (#{id},#{name})")
+    int addNewriskPerson(int id,String name);
+
     @Insert("insert into db_person_risk (pid, rid) values (#{personId}, #{id})")
     int addRiskPerson(int id, int personId);
+
+    @Insert("insert into db_equipment (id, name, type1, type2, type3, type4, type5, type6) values (#{id},#{name},#{type1},#{type2},#{type3},#{type4},#{type5},#{type6})")
+    int addNewEquipment(Equipment equipment);
 
     @Insert("insert into db_equipment_risk (eid, rid) values (#{equipmentId}, #{id})")
     int addRiskEquipment(int id, int equipmentId);

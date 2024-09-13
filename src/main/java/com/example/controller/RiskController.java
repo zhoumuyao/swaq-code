@@ -30,9 +30,10 @@ public class RiskController {
                                         @RequestParam String province,
                                         @RequestParam String urban,
                                         @RequestParam String description,
-                                        @RequestParam int type,
-                                        @RequestParam boolean isUpdate){
-        if(StringUtils.isAnyBlank(date, time, latitude, longitude, country, province, urban, description) || type < 0 || id < 0 ) {
+                                        @RequestParam String type,
+                                        @RequestParam boolean isUpdate,
+                                        @RequestParam(value = "objectDescription", required = false) String objectDescription){
+        if(StringUtils.isAnyBlank(date, time, latitude, longitude, country, province, urban, description) || type.isEmpty() || id < 0 ) {
             return RestBean.failure(400, "请完成填写所有参数");
         }
         Risk riskPlan = new Risk();
@@ -46,6 +47,7 @@ public class RiskController {
         riskPlan.setUrban(urban);
         riskPlan.setDescription(description);
         riskPlan.setType(type);
+        riskPlan.setObjectDescription(objectDescription);
         String s;
         if(isUpdate){
             s = service.updatePlan(riskPlan);
@@ -107,6 +109,17 @@ public class RiskController {
         return RestBean.success(s);
     }
 
+    @PostMapping("/add_newriskPerson")
+    public RestBean<String> addNewriskPerson(@RequestParam int id,
+                                             @RequestParam String name){
+        Person person = new Person();
+        person.setId(id);
+        person.setName(name);
+        String s = service.addNewriskPerson(id,name);
+        return RestBean.success(s);
+
+    }
+
     @PostMapping("/add_riskEquipment")
     public RestBean<String> addRiskEquipment(@RequestParam int id,
                                           @RequestParam(value = "equipments[]", required = false) int[] equipments){
@@ -117,6 +130,28 @@ public class RiskController {
             return RestBean.failure(400, "请选中使用设备");
         }
         String s = service.addRiskEquipment(id, equipments);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/add_newEquipment")
+    public RestBean<String> addNewEquipment(@RequestParam int id,
+                                            @RequestParam String name,
+                                            @RequestParam int type1,
+                                            @RequestParam int type2,
+                                            @RequestParam int type3,
+                                            @RequestParam int type4,
+                                            @RequestParam int type5,
+                                            @RequestParam int type6){
+        Equipment equipment = new Equipment();
+        equipment.setId(id);
+        equipment.setName(name);
+        equipment.setType1(type1);
+        equipment.setType2(type2);
+        equipment.setType3(type3);
+        equipment.setType4(type4);
+        equipment.setType5(type5);
+        equipment.setType6(type6);
+        String s = service.addNewEquipment(equipment);
         return RestBean.success(s);
     }
 

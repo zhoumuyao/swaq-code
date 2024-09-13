@@ -40,6 +40,14 @@ public class RiskServiceImpl implements RiskService {
     }
 
     @Override
+    public String addNewriskPerson(int id,String name){
+        if(mapper.addNewriskPerson(id,name)<0){
+            return "添加错误";
+        }
+        return "添加成功";
+    }
+
+    @Override
     public String addRiskPerson(int id, int[] persons) {
         if(persons.length == 0){
             return null;
@@ -61,6 +69,17 @@ public class RiskServiceImpl implements RiskService {
             if(mapper.addRiskEquipment(id, equipment) < 0){
                 return null;
             }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String addNewEquipment(Equipment equipment){
+        if(equipment == null){
+            return null;
+        }
+        if(mapper.addNewEquipment(equipment)<=0){
+            return null;
         }
         return "添加成功";
     }

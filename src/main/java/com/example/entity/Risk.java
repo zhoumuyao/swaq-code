@@ -17,10 +17,11 @@ public class Risk {
     String province;
     String urban;
     String description;
-    int type;
+    String type;
     int objectClass;
     int sampleType;
     String sampleContent;
     int testMethod;
     String sampleRequirement;
+    String objectDescription;
 }
