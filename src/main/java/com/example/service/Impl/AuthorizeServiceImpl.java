@@ -40,9 +40,9 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if(username == null)
             throw new UsernameNotFoundException("用户名不能为空");
-        Account account = userMapper.findAccountByNameOrEmail(username);
+        Account account = userMapper.findAccountByNameOrEmailOrPoliceId(username);
         if (account == null)
-            throw new UsernameNotFoundException("用户名或密码错误");
+            throw new UsernameNotFoundException("密码错误");
         return User
                 .withUsername(account.getUsername())
                 .password(account.getPassword())
@@ -61,7 +61,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                 return "请求频繁，请稍后再试！";
             }
         }
-        Account account = userMapper.findAccountByNameOrEmail(email);
+        Account account = userMapper.findAccountByNameOrEmailOrPoliceId(email);
         if(account == null && hasAccount){
             return "此邮箱未被注册";
         }
@@ -86,7 +86,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     }
 
     @Override
-    public String validateAndRegister(String username,String password,String email,String code,String sessionId){
+    public String validateAndRegister(String username,String policeId, String policeStation,String password,String email,String code,String sessionId){
 //        String key = "email"  +": " +email+" "+sessionId+":false";
         String key = "email" + ": " + email + " " + ":false";
         if(Boolean.TRUE.equals(template.hasKey(key))){
@@ -95,13 +95,17 @@ public class AuthorizeServiceImpl implements AuthorizeService {
                 return "验证码失效，请重新获取";
             }
             if (s.equals(code)){
-                Account account = userMapper.findAccountByNameOrEmail(username);
-                if(account != null){
+                Account account1 = userMapper.findAccountByNameOrEmailOrPoliceId(username);
+                Account account2 = userMapper.findAccountByNameOrEmailOrPoliceId(policeId);
+                if(account1 != null ){
                     return "该用户名已被注册";
+                }
+                if (account2 != null){
+                    return "该警号已被注册";
                 }
                 template.delete(key);
                 password = encoder.encode(password);
-                if(userMapper.createAccount(username,password,email) > 0){
+                if(userMapper.createAccount(username,policeId,policeStation,password,email) > 0){
                     return null;
                 }else {
                     return "内部错误，请联系管理员！";

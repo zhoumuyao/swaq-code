@@ -41,10 +41,12 @@ public class AuthorizeController {
 
     @PostMapping("/register")
     public RestBean<String> registerUser(@Pattern(regexp = USERNAME_REGEX) @Length(min = 2,max = 8) @RequestParam("username") String username,
-                                         @Length(min = 6,max = 16)@RequestParam("password") String password,
+                                         @Length(min = 2,max = 8) @RequestParam("police_id") String police_id,
+                                         @Length(min = 2,max = 8) @RequestParam("police_station") String police_station,
+                                         @Length(min = 6,max = 16) @RequestParam("password") String password,
                                          @Pattern(regexp = EMAIL_REGEX)@RequestParam("email") String email,
                                          @Length(min = 6,max = 6)@RequestParam("code") String code, HttpSession session){
-        String s = service.validateAndRegister(username, password, email, code,session.getId());
+        String s = service.validateAndRegister(username, police_id,police_station, password, email, code,session.getId());
         if(s == null){
             return RestBean.success("注册成功");
         }else {
