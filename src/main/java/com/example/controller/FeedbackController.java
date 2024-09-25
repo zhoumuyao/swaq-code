@@ -1,9 +1,7 @@
 package com.example.controller;
 
-import com.example.entity.RestBean;
 import com.example.service.FeedbackService;
 import com.example.entity.Feedback;
-import lombok.ToString;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +13,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/feedback")
-public class feedbackController {
+public class FeedbackController {
 
     @Resource
     FeedbackService service;
@@ -41,6 +39,7 @@ public class feedbackController {
         String formattedDate = sdf.format(timestamp);
         System.out.println(formattedDate);
 
-        return service.add(request.getFeedback(), request.getRate(), formattedDate);
+        return service.add(request.getId(), request.getFeedback(), request.getRate(), formattedDate);
     }
+
 }

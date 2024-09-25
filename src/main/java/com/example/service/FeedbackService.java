@@ -9,5 +9,5 @@ public interface FeedbackService {
 
     List<Feedback> showAllFeedback();
 
-    String add(String feedback, int rate, String time);
+    String add(int id, String feedback, int rate, String time);
 }
