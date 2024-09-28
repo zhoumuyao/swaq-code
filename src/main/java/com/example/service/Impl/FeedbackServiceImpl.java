@@ -34,6 +34,14 @@ public class FeedbackServiceImpl implements FeedbackService {
         return "新增反馈成功！";
     }
 
+    @Override
+    public Feedback selectById(int id) {
+        if(id <= 0){
+            return null;
+        }
+        return mapper.select(id);
+    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entity.BiologicalCase;
+import com.example.entity.Invest;
 import com.example.entity.Report;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,4 +17,7 @@ public interface ReportMapper {
 
     @Select("SELECT * from reports where id = #{id}")
     Report select_reportById(int id);
+
+    @Select("SELECT * from db_invest where id = #{id}")
+    Invest select_investById(int id);
 }

@@ -1,6 +1,8 @@
 package com.example.service;
 
+import java.io.File;
+
 public interface ReportService {
 
-    String add_report(int id, String[] date);
+    File outReport(String name, int id);
 }

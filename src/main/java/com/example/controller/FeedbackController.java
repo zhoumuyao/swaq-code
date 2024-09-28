@@ -42,4 +42,9 @@ public class FeedbackController {
         return service.add(request.getId(), request.getFeedback(), request.getRate(), formattedDate);
     }
 
+    @PostMapping("/feedbackById")
+    public Feedback feedbackById(@RequestBody Feedback request){
+        return service.selectById(request.getId());
+    }
+
 }

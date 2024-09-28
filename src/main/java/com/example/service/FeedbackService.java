@@ -10,4 +10,6 @@ public interface FeedbackService {
     List<Feedback> showAllFeedback();
 
     String add(int id, String feedback, int rate, String time);
+
+    Feedback selectById(int id);
 }
