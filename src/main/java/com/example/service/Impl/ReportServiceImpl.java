@@ -27,7 +27,7 @@ public class ReportServiceImpl implements ReportService {
      * 新增报告
      */
     @Override
-    public File outReport(String name, int id){
+    public File outReport(int id){
         // 输出文件
         File outFile = null;
 
@@ -146,25 +146,21 @@ public class ReportServiceImpl implements ReportService {
             // 定义表头和数据
             String[][] table2_1_rows = {
                 {
-                    String.format("空气：%s", handle_info.getAir_quality()),
+                    String.format("空气：%s", handle_info.getAirQuality()),
                     String.format("水质：", handle_info.getWater()),
                     String.format("土壤：%s", handle_info.getSoil()),
                     String.format("天气：%s", handle_info.getWeather()),
                 }, {
                     String.format("温度：%s℃", handle_info.getTemperature()),
                     String.format("湿度：%s%s", handle_info.getHumi(), "%"),
-                    String.format("风向：%s", handle_info.getWind_direction()),
-                    String.format("风速：%sm/s", handle_info.getWind_speed()),
+                    String.format("风向：%s", handle_info.getWindDirection()),
+                    String.format("风速：%sm/s", handle_info.getWindSpeed()),
                 },
             };
-//            System.out.println(handle_info.getAir_quality());
-//            System.out.println(handle_info.getWater());
-//            System.out.println(handle_info.getWind_direction());
-//            System.out.println(handle_info.getWind_speed());
+
             // 使用循环添加表格内容
             for (String[] row : table2_1_rows) {
                 for (String cell : row) {
-//                    System.out.println(cell);
                     table2_1.addCell(new Phrase(cell, contentFont)); // 使用 Phrase 添加内容
                 }
             }
@@ -179,7 +175,7 @@ public class ReportServiceImpl implements ReportService {
             float[] table2_2_Widths = new float[]{1, 1};
             table2_2.setWidths(table2_2_Widths);
             String[] table2_2_row = {
-                    String.format("人口密度:%s", handle_info.getPersonel_density()),
+                    String.format("人口密度:%s", handle_info.getPersonelDensity()),
                     String.format("人员活动:%s", handle_info.getGather())
             };
 

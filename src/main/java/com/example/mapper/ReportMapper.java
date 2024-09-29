@@ -5,7 +5,9 @@ import com.example.entity.Invest;
 import com.example.entity.Report;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Mapper
 public interface ReportMapper {
@@ -19,5 +21,5 @@ public interface ReportMapper {
     Report select_reportById(int id);
 
     @Select("SELECT * from db_invest where id = #{id}")
-    Invest select_investById(int id);
+    Invest select_investById(@Param("id") int id);
 }

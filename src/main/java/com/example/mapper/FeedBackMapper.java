@@ -15,6 +15,6 @@ public interface FeedBackMapper {
     @Insert("insert into feedback (id, feedback, rate, time) values (#{id}, #{feedback}, #{rate}, #{time})")
     int insert(int id, String feedback, int rate, String time);
 
-    @Select("select  * from  feedback where id = #{id}")
+    @Select("select  * from feedback where id = #{id}")
     Feedback select(int id);
 }
