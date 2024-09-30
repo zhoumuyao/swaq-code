@@ -24,4 +24,6 @@ public class Risk {
     int testMethod;
     String sampleRequirement;
     String objectDescription;
+//    String fileName;
+//    String fileUrl;
 }
