@@ -20,18 +20,28 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     /**
-     * 新增部门
+     * 新增反馈
      * @param feedback
      */
     @Override
-    public String add(String feedback, int rate, String time) {
+    public String add(int id, String feedback, int rate, String time) {
         if(feedback == null){
             return null;
         }
-        if(mapper.insert(feedback, rate, time)<=0){
+        if(mapper.insert(id, feedback, rate, time)<=0){
             return null;
         }
         return "新增反馈成功！";
     }
+
+    @Override
+    public Feedback selectById(int id) {
+        if(id <= 0){
+            return null;
+        }
+        return mapper.select(id);
+    }
+
+
 
 }
