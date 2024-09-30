@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface DisposalMapper {
-    @Insert("insert into db_disposal(id,objectClass,sampleType,sampleContent,testMethod,result,sampleRequirement) values (#{id},#{objectClass},#{sampleType},#{sampleContent},#{testMethod},#{result},#{sampleRequirement})")
+    @Insert("insert into db_disposal(id,objectClass,sampleType,sampleContent,testMethod,result,probability,sampleRequirement) values (#{id},#{objectClass},#{sampleType},#{sampleContent},#{testMethod},#{result},#{probability},#{sampleRequirement})")
     int addDisposal(DisposalObject disposalObject);
 
     @Select("select * from db_disposal where id = #{id}")

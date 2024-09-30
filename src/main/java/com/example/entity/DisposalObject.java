@@ -11,5 +11,6 @@ public class DisposalObject {
     String sampleContent;
     String testMethod;
     String result;
+    String probability;
     String sampleRequirement;
 }

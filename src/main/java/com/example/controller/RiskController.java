@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletRequest;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -273,7 +274,7 @@ public class RiskController {
     }
 
     @PostMapping("/uploads")
-    public RestBean<String> upLoadPicture(@RequestParam(value = "file",required = false)MultipartFile file) {
+    public RestBean<String> upLoadPicture(@RequestParam(value = "file",required = false)MultipartFile file, HttpServletRequest request) {
         // 判断文件是否为空
         if(file.isEmpty()){
             return RestBean.failure(400,"文件为空");
@@ -285,7 +286,12 @@ public class RiskController {
         // 设置保存地址（这里是转义字符）
         //1.后台保存位置
         String path = "D:\\biology_security\\swaq-web-web-dlx-46\\public\\image\\";
-        File dest=new File(path+fileName);
+
+        // 设置保存地址（使用用户的主目录）
+//        String userHome = System.getProperty("user.home");
+//        String path = userHome + File.separator + "uploads" + File.separator + "images" + File.separator; // 可以根据需要调整路径
+//        String path =request.getRequestURL().toString().replace(request.getRequestURI(), "")+ "/image/";
+        File dest = new File(path + fileName);
         // 判断文件是否存在
         if(!dest.getParentFile().exists()){
             // 不存在就创建一个
@@ -294,6 +300,9 @@ public class RiskController {
         try {
             // 后台上传
             file.transferTo(dest);
+            // 构造完整的 URL
+//            String baseUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "") + "/image/"; // 获取基本 URL
+//            String fullImageUrl = baseUrl + fileName; // 完整的图片 URL
             return RestBean.success(fileName);
         }catch (Exception e){
             e.printStackTrace();
