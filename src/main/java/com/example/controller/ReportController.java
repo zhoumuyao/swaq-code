@@ -17,6 +17,6 @@ public class ReportController {
     public File outReport(@RequestBody Report report){
         System.out.println("开始生成报告...");
         //        System.out.println(mes);
-        return service.outReport("abtt", report.getId());
+        return service.outReport(report.getId());
     }
 }
