@@ -11,8 +11,8 @@ import java.util.List;
 @Mapper
 public interface CaseMapper {
 
-    @Insert("insert into db_case (date, time, longitude, latitude, country, province, urban, description) " +
-            "values (#{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description})")
+    @Insert("insert into db_case (date, time, longitude, latitude, country, province, urban, description, casualties, symptom_message, influence_scope) " +
+            "values (#{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{casualties}, #{symptomMessage}, #{influenceScope})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int createCase(BiologicalCase biologicalCase);
 

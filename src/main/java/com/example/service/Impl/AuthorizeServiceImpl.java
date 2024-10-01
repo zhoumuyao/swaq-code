@@ -43,6 +43,8 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         Account account = userMapper.findAccountByNameOrEmailOrPoliceId(username);
         if (account == null)
             throw new UsernameNotFoundException("密码错误");
+        userMapper.login(account.getId());
+
         return User
                 .withUsername(account.getUsername())
                 .password(account.getPassword())
@@ -52,7 +54,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Override
     public String sendValidateEmail(String email,String sessionId,boolean hasAccount){
-//        String key = "email" + ": " +email+" "+sessionId+":"+hasAccount;
+//      String key = "email" + ": " +email+" "+sessionId+":"+hasAccount;
         String key = "email" + ": " +email+" "+ ":"+hasAccount;
         System.out.println(key);
         if(Boolean.TRUE.equals(template.hasKey(key))){
@@ -143,4 +145,21 @@ public class AuthorizeServiceImpl implements AuthorizeService {
         password = encoder.encode(password);
         return userMapper.resetPasswordByEmail(password,email) > 0;
     }
+
+    @Override
+    public void logout(String username) {
+        if(username == null)
+            throw new UsernameNotFoundException("用户名不能为空");
+        Account account = userMapper.findAccountByNameOrEmailOrPoliceId(username);
+        if (account == null)
+            return;
+        userMapper.logout(account.getId());
+    }
+
+    @Override
+    public void login(String username) {
+
+    }
+
+
 }

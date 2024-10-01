@@ -17,6 +17,9 @@ public class BiologicalCase {
     String province;
     String urban;
     String description;
+    int casualties;
+    String symptomMessage;
+    int influenceScope;
 
 
     public BiologicalCase() {

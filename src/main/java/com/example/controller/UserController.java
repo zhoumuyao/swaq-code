@@ -15,4 +15,5 @@ public class UserController {
     public RestBean<AccountUser> me(@SessionAttribute("account")AccountUser accountUser){
         return RestBean.success(accountUser);
     }
+
 }

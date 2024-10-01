@@ -27,8 +27,11 @@ public class CaseController {
                                           @RequestParam String country,
                                           @RequestParam String province,
                                           @RequestParam String urban,
-                                          @RequestParam String description){
-        if(StringUtils.isAnyBlank(date, time, latitude, longitude, country, province, urban, description)){
+                                          @RequestParam String description,
+                                          @RequestParam String casualties,
+                                          @RequestParam String symptomMessage,
+                                          @RequestParam String influenceScope){
+        if(StringUtils.isAnyBlank(date, time, latitude, longitude, country, province, urban, description, casualties, symptomMessage, influenceScope)){
             return RestBean.failure(400, -1);
         }
         BiologicalCase biologicalCase = new BiologicalCase();
@@ -40,11 +43,14 @@ public class CaseController {
         biologicalCase.setProvince(province);
         biologicalCase.setUrban(urban);
         biologicalCase.setDescription(description);
+        biologicalCase.setCasualties(Integer.parseInt(casualties));
+        biologicalCase.setSymptomMessage(symptomMessage);
+        biologicalCase.setInfluenceScope(Integer.parseInt(influenceScope));
         int id = service.createCase(biologicalCase);
         if(id == -1){
             return RestBean.failure(400, id);
         }
-        return RestBean.success  (id);
+        return RestBean.success(id);
     }
 
     @PostMapping("/search_case")

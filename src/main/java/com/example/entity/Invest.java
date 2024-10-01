@@ -1,8 +1,8 @@
 package com.example.entity;
 
 import com.alibaba.fastjson2.JSON;
-import jdk.nashorn.internal.objects.annotations.Getter;
-import jdk.nashorn.internal.objects.annotations.Setter;
+//import jdk.nashorn.internal.objects.annotations.Getter;
+//import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.Data;
 
 import java.sql.Time;

@@ -17,4 +17,12 @@ public interface UserMapper {
     int resetPasswordByEmail(String password,String email);
     @Select("select * from db_account where username = #{text} or email = #{text}")
     AccountUser findAccountUserByNameOrEmail(String text);
+    @Update("update db_account set is_login = 1 where id = #{id}")
+    void login(int id);
+
+    @Update("update db_account set is_login = 0 where id = #{id}")
+    void logout(int id);
+
+    @Select("SELECT count(*) from db_account where is_login = 1")
+    int getOnlineNumber();
 }
