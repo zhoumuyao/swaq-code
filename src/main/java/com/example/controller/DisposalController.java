@@ -29,6 +29,7 @@ public class DisposalController {
                                         @RequestParam String sampleContent,
                                         @RequestParam String testMethod,
                                         @RequestParam String result,
+                                        @RequestParam String probability,
                                         @RequestParam String sampleRequirement){
         if(StringUtils.isAnyBlank(objectClass,sampleType,result,testMethod, sampleContent) || id<0 ){
             return RestBean.failure(400,"请完成填写所有参数");
@@ -41,6 +42,7 @@ public class DisposalController {
         disposalObject.setSampleContent(sampleContent);
         disposalObject.setTestMethod(testMethod);
         disposalObject.setResult(result);
+        disposalObject.setProbability(probability);
         disposalObject.setSampleRequirement(sampleRequirement);
         String s = disposalService.addDisposal(disposalObject);
         if(s == null){

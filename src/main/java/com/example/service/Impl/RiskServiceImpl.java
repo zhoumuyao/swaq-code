@@ -144,4 +144,22 @@ public class RiskServiceImpl implements RiskService {
         }
         return mapper.selectEquipmentList();
     }
+
+    // 插入文件记录
+    @Override
+    public void saveFileRecord(FileUpload fileUpload) {
+        mapper.insertFile(fileUpload);
+    }
+
+    // 获取所有文件记录
+    @Override
+    public List<FileUpload> getAllFiles() {
+        return mapper.getAllFiles();
+    }
+
+    // 根据 ID 获取文件信息
+    @Override
+    public FileUpload getFileById(int id) {
+        return mapper.getFileById(id);
+    }
 }

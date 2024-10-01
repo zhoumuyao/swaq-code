@@ -4,18 +4,27 @@ package com.example.controller;
 import com.example.entity.*;
 import com.example.service.RiskService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletRequest;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
 @RequestMapping("/api/risk")
 public class RiskController {
+
+    private static final String UPLOAD_DIR = "D:/uploads/";
 
     @Resource
     RiskService service;
@@ -141,7 +150,8 @@ public class RiskController {
                                             @RequestParam int type3,
                                             @RequestParam int type4,
                                             @RequestParam int type5,
-                                            @RequestParam int type6){
+                                            @RequestParam int type6,
+                                            @RequestParam int type7){
         Equipment equipment = new Equipment();
         equipment.setId(id);
         equipment.setName(name);
@@ -151,6 +161,7 @@ public class RiskController {
         equipment.setType4(type4);
         equipment.setType5(type5);
         equipment.setType6(type6);
+        equipment.setType7(type7);
         String s = service.addNewEquipment(equipment);
         return RestBean.success(s);
     }
@@ -220,6 +231,84 @@ public class RiskController {
         return RestBean.success(equipmentList);
     }
 
+    @PostMapping("/upload")
+    public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file) {
+        Map<String, String> result = new HashMap<>();
+        if (file.isEmpty()) {
+            result.put("message", "文件为空");
+            return result;
+        }
 
+        try {
+            // 保存文件到本地目录
+            String fileName = file.getOriginalFilename();
+            File dest = new File(UPLOAD_DIR + fileName);
+            file.transferTo(dest);
+
+            // 构造文件 URL（实际应用中应该指向静态资源服务器）
+            String fileUrl = "http://localhost:8080/images/" + fileName;
+
+            // 将文件信息保存到数据库
+            FileUpload fileRecord = new FileUpload();
+            fileRecord.setFileName(fileName);
+            fileRecord.setFileUrl(fileUrl);
+
+            service.saveFileRecord(fileRecord);
+
+            // 返回上传结果
+            result.put("url", fileUrl);
+            result.put("message", "文件上传成功");
+        } catch (IOException e) {
+            e.printStackTrace();
+            result.put("message", "文件上传失败");
+        }
+        return result;
+    }
+
+    // 获取所有上传的文件记录
+    @GetMapping
+    public Map<String, Object> getAllFiles() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("files", service.getAllFiles());
+        return result;
+    }
+
+    @PostMapping("/uploads")
+    public RestBean<String> upLoadPicture(@RequestParam(value = "file",required = false)MultipartFile file, HttpServletRequest request) {
+        // 判断文件是否为空
+        if(file.isEmpty()){
+            return RestBean.failure(400,"文件为空");
+        }
+        // 获取传过来的文件名字
+        String OriginalFilename=file.getOriginalFilename();
+        // 为了防止重名覆盖，获取系统时间戳+原始文件的后缀名
+        String fileName=System.currentTimeMillis()+"."+OriginalFilename.substring(OriginalFilename.lastIndexOf(".")+1);
+        // 设置保存地址（这里是转义字符）
+        //1.后台保存位置
+        String path = "D:\\biology_security\\swaq-web-web-dlx-46\\public\\image\\";
+
+        // 设置保存地址（使用用户的主目录）
+//        String userHome = System.getProperty("user.home");
+//        String path = userHome + File.separator + "uploads" + File.separator + "images" + File.separator; // 可以根据需要调整路径
+//        String path =request.getRequestURL().toString().replace(request.getRequestURI(), "")+ "/image/";
+        File dest = new File(path + fileName);
+        // 判断文件是否存在
+        if(!dest.getParentFile().exists()){
+            // 不存在就创建一个
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            // 后台上传
+            file.transferTo(dest);
+            // 构造完整的 URL
+//            String baseUrl = request.getRequestURL().toString().replace(request.getRequestURI(), "") + "/image/"; // 获取基本 URL
+//            String fullImageUrl = baseUrl + fileName; // 完整的图片 URL
+            return RestBean.success(fileName);
+        }catch (Exception e){
+            e.printStackTrace();
+            return RestBean.failure(400,"上传失败");
+        }
+
+    }
 
 }

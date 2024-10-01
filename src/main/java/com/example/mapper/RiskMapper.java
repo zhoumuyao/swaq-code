@@ -25,7 +25,7 @@ public interface RiskMapper {
     @Insert("insert into db_person_risk (pid, rid) values (#{personId}, #{id})")
     int addRiskPerson(int id, int personId);
 
-    @Insert("insert into db_equipment (id, name, type1, type2, type3, type4, type5, type6) values (#{id},#{name},#{type1},#{type2},#{type3},#{type4},#{type5},#{type6})")
+    @Insert("insert into db_equipment (id, name, type1, type2, type3, type4, type5, type6, type7) values (#{id},#{name},#{type1},#{type2},#{type3},#{type4},#{type5},#{type6},#{type7})")
     int addNewEquipment(Equipment equipment);
 
     @Insert("insert into db_equipment_risk (eid, rid) values (#{equipmentId}, #{id})")
@@ -51,4 +51,15 @@ public interface RiskMapper {
 
     @Select("SELECT * from db_equipment")
     List<Equipment> selectEquipmentList();
+
+    @Insert("insert into db_fileUpload (fileName,fileUrl) values (#{fileName},#{fileUrl})")
+    void insertFile(FileUpload fileUpload);
+
+    // 查询所有文件记录
+    @Select("SELECT * FROM db_fileUpload")
+    List<FileUpload> getAllFiles();
+
+    // 根据 ID 查询文件信息
+    @Select("SELECT * FROM db_fileUpload WHERE id = #{id}")
+    FileUpload getFileById(int id);
 }

@@ -32,4 +32,13 @@ public interface RiskService {
     List<Person> searchPersonList(Person person);
 
     List<Equipment> searchEquipmentList(Equipment equipment);
+
+    // 保存文件记录到数据库
+    void saveFileRecord(FileUpload fileUpload);
+
+    // 获取所有文件记录
+    List<FileUpload> getAllFiles();
+
+    // 根据 ID 获取文件信息
+    FileUpload getFileById(int id);
 }

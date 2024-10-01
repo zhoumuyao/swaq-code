@@ -12,5 +12,6 @@ public class Equipment {
     int type4;
     int type5;
     int type6;
+    int type7;
     String guide;
 }
