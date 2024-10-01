@@ -285,7 +285,7 @@ public class RiskController {
         String fileName=System.currentTimeMillis()+"."+OriginalFilename.substring(OriginalFilename.lastIndexOf(".")+1);
         // 设置保存地址（这里是转义字符）
         //1.后台保存位置
-        String path = "D:\\biology_security\\swaq-web-web-dlx-46\\public\\image\\";
+        String path = "C:\\Users\\dulixin\\Desktop\\shengwu1\\swaq-web\\public\\image\\";
 
         // 设置保存地址（使用用户的主目录）
 //        String userHome = System.getProperty("user.home");

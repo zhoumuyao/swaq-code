@@ -18,11 +18,6 @@ public class Risk {
     String urban;
     String description;
     String type;
-    int objectClass;
-    int sampleType;
-    String sampleContent;
-    int testMethod;
-    String sampleRequirement;
     String objectDescription;
 //    String fileName;
 //    String fileUrl;
