@@ -1,9 +1,12 @@
 package com.example.service.Impl;
-import com.example.entity.BiologicalCase;
-import com.example.entity.Invest;
+import com.example.entity.*;
+import com.example.mapper.DisposalMapper;
+import com.example.mapper.RiskMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
+import java.util.HashSet;
+import java.util.List;
 import com.example.mapper.ReportMapper;
 import com.example.service.ReportService;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -11,7 +14,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.UUID;
+import java.util.Set;
+
 import com.itextpdf.awt.AsianFontMapper;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
@@ -22,6 +26,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class ReportServiceImpl implements ReportService {
     @Resource
     private ReportMapper mapper;
+
+    @Resource
+    private RiskMapper riskMapper;
+
+    @Resource
+    DisposalMapper disposalMapper;
 
     /**
      * 新增报告
@@ -95,13 +105,57 @@ public class ReportServiceImpl implements ReportService {
             }
 
             // 6. 添加【二、生物安全案事件风险评估】
+            List<DisposalObject> disposalObjects = disposalMapper.searchDisposal(id);
             BiologicalCase risk_info = mapper.select_caseById(id);
+            int[] riskPersons = riskMapper.selectRiskPerson(id);
+            int[] riskEquipments = riskMapper.selectRiskEquipment(id);
+            List<Person> listRiskPerson = riskMapper.selectPersonList();
+            List<Equipment> listRiskEquipment = riskMapper.selectEquipmentList();
+
+            // 将 int 数组转换为 Set 以提高搜索效率
+            Set<Integer> riskPersonIds = new HashSet<>();
+            for (int personId : riskPersons) {
+                riskPersonIds.add(personId);
+            }
+
+            Set<Integer> riskEquipmentIds = new HashSet<>();
+            for (int equipmentId : riskEquipments) {
+                riskEquipmentIds.add(equipmentId);
+            }
+
+            // 过滤 listRiskPerson，移除不包含在 riskPersons 数组中的 Person 对象
+            listRiskPerson.removeIf(person -> !riskPersonIds.contains(person.getId()));
+            StringBuilder personString = new StringBuilder("3、人员：");
+
+            if (!listRiskPerson.isEmpty()){
+                for(Person person : listRiskPerson){
+                    personString.append(person.getName()).append(" ");
+                }
+            }
+
+            listRiskEquipment.removeIf(equipment -> !riskEquipmentIds.contains(equipment.getId()));
+            StringBuilder equipmentString = new StringBuilder("4、装置：");
+            if (!listRiskEquipment.isEmpty()){
+                for(Equipment equipment : listRiskEquipment){
+                    equipmentString.append(equipment.getName()).append(" ");
+                }
+            }
+
+            StringBuilder disposalString = new StringBuilder("5、样本信息：");
+            if(!disposalObjects.isEmpty()){
+                for (DisposalObject disposalObject : disposalObjects){
+                    disposalString.append("采样种类：").append(disposalObject.getObjectClass()).append("  采样内容：").append(disposalObject.getSampleContent());
+                    disposalString.append("  快检方法：").append(disposalObject.getTestMethod()).append("  快检结果：").append(disposalObject.getResult());
+                    disposalString.append("  检测概率：").append(disposalObject.getProbability()).append("  采样要求：").append(disposalObject.getSampleRequirement()).append("\n");
+                }
+            }
+
             String[] risk_title = {
                     String.format("1、时间：%s %s", risk_info.getDate(), risk_info.getTime()),
-                    String.format("2、地点：%s%s%s%s", risk_info.getProvince(), risk_info.getCountry(), risk_info.getUrban(), risk_info.getDescription()),
-                    String.format("3、人员：", "xxx"),
-                    String.format("4、装置：", "xxx"),
-                    String.format("5、样本信息：",  "xxx"),
+                    String.format("2、地点：%s%s%s%s", risk_info.getCountry(), risk_info.getProvince(),  risk_info.getUrban(), risk_info.getDescription()),
+                    String.format("%s", personString),
+                    String.format("%s", equipmentString),
+                    String.format("%s", disposalString),
             };
             // 添加标题段落
             title = new Paragraph("二、生物安全案事件风险评估\n", contentFont);
