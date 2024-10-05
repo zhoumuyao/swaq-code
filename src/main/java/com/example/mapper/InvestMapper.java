@@ -18,4 +18,22 @@ public interface InvestMapper {
 
     @Delete("DELETE FROM db_invest WHERE id = ${id}")
     void deleteInvest(int id);
+
+    @Insert("insert into db_person_handle (pid, hid) values (#{personId}, #{id})")
+    int addHandlePerson(int id, int personId);
+
+    @Insert("insert into db_equipment_handle (eid, hid) values (#{equipmentId}, #{id})")
+    int addHandleEquipment(int id, int equipmentId);
+
+    @Delete("delete from db_person_handle where hid = #{id}")
+    int deletePerson(int id);
+
+    @Delete("delete from db_equipment_handle where hid = #{id}")
+    int deleteHandleEquipment(int id);
+
+    @Select("SELECT pid from db_person_handle where hid = #{hid}")
+    int[] selectHandlePerson(int rid);
+
+    @Select("SELECT eid from db_equipment_handle where hid = #{hid}")
+    int[] selectHandleEquipment(int rid);
 }

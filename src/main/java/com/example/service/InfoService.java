@@ -2,6 +2,7 @@ package com.example.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Map;
 
 public interface InfoService {
@@ -29,4 +30,6 @@ public interface InfoService {
                       );
 
     Map<Integer,String> queryInfo(int id);
+
+    File outReport(int id);
 }

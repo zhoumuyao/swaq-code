@@ -23,8 +23,6 @@ public class InvestServiceImpl implements InvestService {
         if(investMapper.createInvest(invest) <= 0){
             return null;
         }
-        //mapper.addPerson(riskPlan.getId(), riskPlan.getPerson().e.getId());
-        //mapper.addEquipment(riskPlan.getId(), riskPlan.getEquipment().getId());
         return "添加成功";
     }
 
@@ -36,5 +34,57 @@ public class InvestServiceImpl implements InvestService {
         }
         System.out.println(invest);
         return invest;
+    }
+
+    @Override
+    public String addHandlePerson(int id, int[] persons) {
+        if(persons.length == 0){
+            return null;
+        }
+        for (int person : persons) {
+            if(investMapper.addHandlePerson(id, person) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String addHandleEquipment(int id, int[] equipments) {
+        if(equipments.length == 0){
+            return null;
+        }
+        for (int equipment : equipments) {
+            if(investMapper.addHandleEquipment(id, equipment) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String deleteHandlePerson(int id) {
+        if(investMapper.deleteHandleEquipment(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public String deleteHandleEquipment(int id) {
+        if(investMapper.deleteHandleEquipment(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public int[] selectHandlePerson(int id) {
+        return investMapper.selectHandlePerson(id);
+    }
+
+    @Override
+    public int[] selectHandleEquipment(int id) {
+        return investMapper.selectHandleEquipment(id);
     }
 }

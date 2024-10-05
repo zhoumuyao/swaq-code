@@ -29,4 +29,68 @@ public class InvestController {
         Invest invest = investService.queryInvest(id);
         return RestBean.success(invest);
     }
+
+
+    @PostMapping("/delete_HandlePerson")
+    public RestBean<String> deleteHandlePerson(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        String s = investService.deleteHandlePerson(id);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/delete_HandleEquipment")
+    public RestBean<String> deleteHandleEquipment(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        String s = investService.deleteHandleEquipment(id);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/add_HandlePerson")
+    public RestBean<String> addHandlePerson( @RequestParam int id,
+                                           @RequestParam(value = "persons[]", required = false) int[] persons){
+        if(id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        if(persons == null){
+            return RestBean.failure(400, "请选中参与警务人员");
+        }
+        String s = investService.addHandlePerson(id, persons);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/add_HandleEquipment")
+    public RestBean<String> addHandleEquipment(@RequestParam int id,
+                                             @RequestParam(value = "equipments[]", required = false) int[] equipments){
+        if(id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        if(equipments == null){
+            return RestBean.failure(400, "请选中使用设备");
+        }
+        String s = investService.addHandleEquipment(id, equipments);
+        return RestBean.success(s);
+    }
+
+
+    @PostMapping("/select_HandlePerson")
+    public RestBean<int[]> selectHandlePersons(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, null);
+        }
+        int[] handlePersons = investService.selectHandlePerson(id);
+        return RestBean.success(handlePersons);
+    }
+
+    @PostMapping("/select_HandleEquipment")
+    public RestBean<int[]> selectHandleEquipment(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, null);
+        }
+        int[] handleEquipments = investService.selectHandleEquipment(id);
+        return RestBean.success(handleEquipments);
+    }
 }

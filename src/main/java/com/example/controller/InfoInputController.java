@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.entity.Report;
 import com.example.entity.RestBean;
 import com.example.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.Map;
 
 @RestController
@@ -46,4 +48,9 @@ public class InfoInputController {
         Map<Integer,String> res = infoService.queryInfo(id);
         return RestBean.success(res);
     }
+
+//    @PostMapping("/export")
+//    public File outReport(@RequestParam("id") int id){
+//        return infoService.outReport(id);
+//    }
 }
