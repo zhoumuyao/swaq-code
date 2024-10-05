@@ -42,6 +42,8 @@ public class SecurityConfiguration {
         return http
                 .authorizeHttpRequests()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/static/**").permitAll()
+                .antMatchers("/info/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

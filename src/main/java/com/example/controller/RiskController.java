@@ -218,6 +218,7 @@ public class RiskController {
         person.setId(id);
         person.setName(name);
         List<Person> personList = service.searchPersonList(person);
+        System.out.println("hello");
         return RestBean.success(personList);
     }
 

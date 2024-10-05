@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.10.84.130:3308/swaq?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://192.10.84.130:3308/swaq?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: 123456
   mail:
@@ -22,8 +22,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-server:
-  servlet:
-    session:
-      timeout: 48600s
+
 

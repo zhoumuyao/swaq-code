@@ -7,16 +7,46 @@ public class Info {
 
     int id;
 
-    String env_img;
+    String file1path;
 
-    String per_img;
+    String file2path;
 
-    String good_img;
+    String file3path;
 
-    String name;
 
-    String quality;
+    String file4path;
 
-    String discription;
+
+    String file5path;
+
+    String file6path;
+
+    String file7path;
+
+    String file8path;
+
+    String file9path;
+
+    String file10path;
+
+    String file11path;
+
+    String file12path;
+
+    String file13path;
+
+    String file14path;
+
+    String file15path;
+
+    String file16path;
+
+    String file17path;
+
+    String file18path;
+
+    String file19path;
+
+    int danger_id;
 
 }
