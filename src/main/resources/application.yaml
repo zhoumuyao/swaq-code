@@ -19,8 +19,14 @@ spring:
     database: 0
     host: 192.10.84.130
     port: 6382
+  web:
+    resources:
+      cache:
+        period: 0
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-
-
+#若有文件服务器，这里修改为文件服务器地址
+IMAGE:
+  UPLOAD:
+    PATH: "file:src/main/resources/static/info/"
