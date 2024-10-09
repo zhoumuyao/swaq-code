@@ -19,7 +19,7 @@ public class BiologicalCase {
     String description;
     int casualties;
     String symptomMessage;
-    int influenceScope;
+    double influenceScope;
 
 
     public BiologicalCase() {

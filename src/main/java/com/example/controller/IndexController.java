@@ -16,7 +16,7 @@ public class IndexController {
     @Resource
     IndexService indexService;
 
-    @GetMapping("/online_number")
+    @PostMapping("/online_number")
     public RestBean<Integer> getOnlineNumber(){
         int number = indexService.getOnlineNumber();
         if(number >= 0)

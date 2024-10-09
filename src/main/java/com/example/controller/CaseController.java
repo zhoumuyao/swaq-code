@@ -45,7 +45,7 @@ public class CaseController {
         biologicalCase.setDescription(description);
         biologicalCase.setCasualties(Integer.parseInt(casualties));
         biologicalCase.setSymptomMessage(symptomMessage);
-        biologicalCase.setInfluenceScope(Integer.parseInt(influenceScope));
+        biologicalCase.setInfluenceScope(Double.parseDouble(influenceScope));
         int id = service.createCase(biologicalCase);
         if(id == -1){
             return RestBean.failure(400, id);
