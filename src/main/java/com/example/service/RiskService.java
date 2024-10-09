@@ -1,8 +1,10 @@
 package com.example.service;
 
 import com.example.entity.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RiskService {
     String createPlan(Risk riskPlan);
@@ -41,4 +43,9 @@ public interface RiskService {
 
     // 根据 ID 获取文件信息
     FileUpload getFileById(int id);
+
+    String createPic(int id,
+                      MultipartFile file);
+
+    String queryPic(int id);
 }

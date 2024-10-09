@@ -3,11 +3,18 @@ package com.example.service.Impl;
 import com.example.entity.*;
 import com.example.mapper.RiskMapper;
 import com.example.service.RiskService;
+
+import java.io.File;
 import java.util.Collections;
+
+import com.example.util.imageUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -161,5 +168,46 @@ public class RiskServiceImpl implements RiskService {
     @Override
     public FileUpload getFileById(int id) {
         return mapper.getFileById(id);
+    }
+
+    @Override
+    public String createPic(int id,
+                             MultipartFile file) {
+
+        String folderPath = "src/main/resources/static/riskImg/" + id;
+
+        // 创建文件对象
+        File directory = new File(folderPath);
+        if (!directory.exists()) {
+            directory.mkdirs();  // 创建目录及其父目录
+        }
+
+        // 存储文件路径
+        String filePaths = null;
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = file.getOriginalFilename(); // 获取照片名
+            String filePath = folderPath;
+            imageUtil.saveImage(file, filePath);  // 保存文件
+            filePaths = "/riskImg/"+ id + "/" + fileName;  // 添加文件路径到列表
+        }
+
+        RiskPic riskPic = mapper.containPicById(id);
+        if(riskPic == null){
+            mapper.createPic(id,filePaths);
+        }else{
+            mapper.updatePic(id,filePaths);
+        }
+        return "成功存入";
+    }
+
+    @Override
+    public String queryPic(int id) {
+        RiskPic riskPic = mapper.queryPic(id);
+        String path = null;
+        if(riskPic.getFilePath() != null){
+            path = riskPic.getFilePath();
+        }
+        return path;
     }
 }

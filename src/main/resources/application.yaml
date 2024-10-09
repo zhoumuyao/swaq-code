@@ -29,4 +29,5 @@ mybatis:
 #若有文件服务器，这里修改为文件服务器地址
 IMAGE:
   UPLOAD:
-    PATH: "file:src/main/resources/static/info/"
+    PATH: "file:src/main/resources/static/"
+

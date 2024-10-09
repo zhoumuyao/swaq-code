@@ -62,4 +62,39 @@ public interface RiskMapper {
     // 根据 ID 查询文件信息
     @Select("SELECT * FROM db_fileUpload WHERE id = #{id}")
     FileUpload getFileById(int id);
+
+    //插入图片路径
+    @Insert({
+            "<script>",
+            "INSERT INTO db_riskPic (id",
+            "<if test='filePath != null'>, filePath</if>",
+            ") VALUES (#{id}",
+            "<if test='filePath != null'>, #{filePath}</if>",
+            ")",
+            "</script>"
+    })
+    int createPic(
+            int id,
+            String filePath
+    );
+
+    //根据id查询图片信息
+    @Select("SELECT * FROM db_riskPic  WHERE id = #{id}")
+    RiskPic containPicById(int id);
+
+    @Select("SELECT * from db_riskPic where id= #{id}")
+    RiskPic queryPic(int id);
+
+    @Update({
+            "<script>",
+            "UPDATE db_riskPic",
+            "<set>",
+            "<if test='filePath != null and filePath != \"\"'>filePath = #{filePath},</if>",
+            "</set>",
+            "WHERE id = ${id}",
+            "</script>"
+    })
+    void updatePic(int id,
+                    String filePath);
 }
+

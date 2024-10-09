@@ -44,6 +44,7 @@ public class SecurityConfiguration {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/info/**").permitAll()
+                .antMatchers("/info2/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
