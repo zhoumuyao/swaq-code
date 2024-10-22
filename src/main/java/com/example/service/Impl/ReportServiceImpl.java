@@ -2,6 +2,9 @@ package com.example.service.Impl;
 import com.example.entity.*;
 import com.example.mapper.DisposalMapper;
 import com.example.mapper.RiskMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
@@ -41,15 +44,25 @@ public class ReportServiceImpl implements ReportService {
         // 输出文件
         File outFile = null;
 
+        // 报告存储路径
+        String FILE_PATH_TEMPLATE = "src/main/resources/reports/%s";
+        outFile = new File(String.format(FILE_PATH_TEMPLATE, "案件" + id + "_生物安全案事件处置报告" + ".pdf"));
+        // 如果不存在 reports 文件夹，则创建文件夹
+        File reportsDir = new File("src/main/resources/reports");
+        if (!reportsDir.exists()) {
+            reportsDir.mkdirs();
+        }
+
+        System.out.println("临时文件所在位置：——" + outFile.getPath());
         try {
-//            String FILE_PATH_TEMPLATE = System.getProperty("java.io.tmpdir") + "/tempdf/%s";
-            String FILE_PATH_TEMPLATE = System.getProperty("user.home") + "\\Desktop" + "/tempdf/%s";
-            //生成临时文件位置，存储到 java.io.tmpdir 下
-            outFile = new File(String.format(FILE_PATH_TEMPLATE, id + "生物安全案事件处置报告.pdf"));
-            //如果不存在临时文件夹，则创建文件夹
-            if (!outFile.getParentFile().exists()) {
-                outFile.getParentFile().mkdirs();
-            }
+            //  String FILE_PATH_TEMPLATE = System.getProperty("user.home") + "\\Desktop" + "/tempdf/%s";
+            //  //生成临时文件位置，存储到 java.io.tmpdir 下
+            //  outFile = new File(String.format(FILE_PATH_TEMPLATE, id + "生物安全案事件处置报告.pdf"));
+            //  /如果不存在临时文件夹，则创建文件夹
+            //  if (!outFile.getParentFile().exists()) {
+            //      outFile.getParentFile().mkdirs();
+            //   }
+
             System.out.println("临时文件所在位置：——" + outFile.getPath());
             FileOutputStream outputStream = new FileOutputStream(outFile);
             Rectangle rectangle = new Rectangle(PageSize.A4);
