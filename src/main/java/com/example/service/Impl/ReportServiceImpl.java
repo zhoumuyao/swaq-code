@@ -20,6 +20,7 @@ import com.itextpdf.awt.AsianFontMapper;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.ByteArrayOutputStream;
 
 
 @Service
@@ -37,28 +38,37 @@ public class ReportServiceImpl implements ReportService {
      * 新增报告
      */
     @Override
-    public File outReport(int id){
+    public byte[] outReport(int id){
         // 输出文件
         File outFile = null;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
+        // 报告存储路径
+        String FILE_PATH_TEMPLATE = "src/main/resources/reports/%s";
+        outFile = new File(String.format(FILE_PATH_TEMPLATE, "案件" + id + "_生物安全案事件处置报告" + ".pdf"));
+        // 如果不存在 reports 文件夹，则创建文件夹
+        File reportsDir = new File("src/main/resources/reports");
+        if (!reportsDir.exists()) {
+            reportsDir.mkdirs();
+        }
+
+        System.out.println("报告文件即将存储在：" + outFile.getPath());
         try {
-//            String FILE_PATH_TEMPLATE = System.getProperty("java.io.tmpdir") + "/tempdf/%s";
-            String FILE_PATH_TEMPLATE = System.getProperty("user.home") + "\\Desktop" + "/tempdf/%s";
-            //生成临时文件位置，存储到 java.io.tmpdir 下
-            outFile = new File(String.format(FILE_PATH_TEMPLATE, id + "生物安全案事件处置报告.pdf"));
-            //如果不存在临时文件夹，则创建文件夹
-            if (!outFile.getParentFile().exists()) {
-                outFile.getParentFile().mkdirs();
-            }
-            System.out.println("临时文件所在位置：——" + outFile.getPath());
+            //  String FILE_PATH_TEMPLATE = System.getProperty("user.home") + "\\Desktop" + "/tempdf/%s";
+            //  //生成临时文件位置，存储到 java.io.tmpdir 下
+            //  outFile = new File(String.format(FILE_PATH_TEMPLATE, id + "生物安全案事件处置报告.pdf"));
+            //  /如果不存在临时文件夹，则创建文件夹
+            //  if (!outFile.getParentFile().exists()) {
+            //      outFile.getParentFile().mkdirs();
+            //   }
             FileOutputStream outputStream = new FileOutputStream(outFile);
             Rectangle rectangle = new Rectangle(PageSize.A4);
-            //Rectangle rectangle = PageSize.A4.rotate();
 
             //1.创建文档 并设置四周边距
             Document document = new Document(rectangle, 40, 40, 40, 40);
             //2.新建pdf实例 输出到本地文件目录
             //PDFWriter可以将文档存成PDF文件；HtmlWriter可以将文档存成html文件
+            PdfWriter.getInstance(document, byteArrayOutputStream);
             PdfWriter.getInstance(document, outputStream);
             //3.打开文档 无论输出到本地还是 页面都要打开文档
             document.open();
@@ -88,7 +98,7 @@ public class ReportServiceImpl implements ReportService {
             // 5. 添加【一、生物安全案事件基本信息】
             BiologicalCase case_info = mapper.select_caseById(id);
             String[] case_info_titles = {
-                    String.format("1、案件名称：%s", case_info.getId()),
+                    String.format("1、案件号：%s", case_info.getId()),
                     String.format("2、时间：%s %s", case_info.getDate(), case_info.getTime()),
                     String.format("3、地点：%s%s%s%s", case_info.getProvince(), case_info.getCountry(), case_info.getUrban(), case_info.getDescription()),
                     String.format("4、现场情况：(%s, %s)", case_info.getLongitude(), case_info.getLatitude()),
@@ -308,6 +318,6 @@ public class ReportServiceImpl implements ReportService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return outFile;
+        return byteArrayOutputStream.toByteArray();
     }
 }

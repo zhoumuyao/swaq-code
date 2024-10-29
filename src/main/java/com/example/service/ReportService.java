@@ -4,5 +4,5 @@ import java.io.File;
 
 public interface ReportService {
 
-    File outReport(int id);
+    byte[] outReport(int id);
 }

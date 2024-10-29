@@ -20,18 +20,20 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     /**
-     * 新增反馈
+     * 根据id新增或修改反馈
      * @param feedback
      */
     @Override
     public String add(int id, String feedback, int rate, String time) {
-        if(feedback == null){
+        if (feedback == null) {
             return null;
         }
-        if(mapper.insert(id, feedback, rate, time)<=0){
+        // 使用新的插入或更新方法
+        int result = mapper.insertOrUpdate(id, feedback, rate, time);
+        if (result <= 0) {
             return null;
         }
-        return "新增反馈成功！";
+        return "操作成功！"; // 这里可以根据需要修改返回的消息
     }
 
     @Override
