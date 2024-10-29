@@ -174,7 +174,7 @@ public class RiskServiceImpl implements RiskService {
     public String createPic(int id,
                              MultipartFile file) {
 
-        String folderPath = "src/main/resources/static/riskImg/" + id;
+        String folderPath = "src/main/resources/static/info2/" + id;
 
         // 创建文件对象
         File directory = new File(folderPath);
@@ -189,7 +189,7 @@ public class RiskServiceImpl implements RiskService {
             String fileName = file.getOriginalFilename(); // 获取照片名
             String filePath = folderPath;
             imageUtil.saveImage(file, filePath);  // 保存文件
-            filePaths = "/riskImg/"+ id + "/" + fileName;  // 添加文件路径到列表
+            filePaths = "/info2/"+ id + "/" + fileName;  // 添加文件路径到列表
         }
 
         RiskPic riskPic = mapper.containPicById(id);
