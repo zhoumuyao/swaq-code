@@ -204,10 +204,12 @@ public class RiskServiceImpl implements RiskService {
     @Override
     public String queryPic(int id) {
         RiskPic riskPic = mapper.queryPic(id);
+        System.out.println(riskPic);
         String path = null;
         if(riskPic.getFilePath() != null){
             path = riskPic.getFilePath();
         }
+        System.out.println(path);
         return path;
     }
 }

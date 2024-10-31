@@ -91,7 +91,7 @@ public interface RiskMapper {
             "<set>",
             "<if test='filePath != null and filePath != \"\"'>filePath = #{filePath},</if>",
             "</set>",
-            "WHERE id = ${id}",
+            "WHERE id = #{id}",
             "</script>"
     })
     void updatePic(int id,

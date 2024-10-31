@@ -316,6 +316,7 @@ public class RiskController {
 //            e.printStackTrace();
 //            return RestBean.failure(400,"上传失败");
 //        }
+        System.out.println(file);
         String res = service.createPic(id,file);
         return RestBean.success(res);
     }
@@ -323,7 +324,9 @@ public class RiskController {
     @PostMapping("/viewPic")
     public RestBean<String> viewPic(@RequestParam("id") int id){
         String res = service.queryPic(id);
+        System.out.println(res);
         return RestBean.success(res);
+
     }
 
 }
