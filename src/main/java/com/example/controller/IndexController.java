@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
-import com.example.entity.user.AccountUser;
 import com.example.service.IndexService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

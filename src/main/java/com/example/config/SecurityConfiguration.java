@@ -2,7 +2,6 @@ package com.example.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.RestBean;
-import com.example.entity.user.AccountUser;
 import com.example.service.AuthorizeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -70,9 +70,6 @@ public class SecurityConfiguration {
                 .authenticationEntryPoint(this::onAuthenticationFailure)
                 .and()
                 .build();
-
-
-
     }
     @Bean
     public PersistentTokenRepository tokenRepository(){
@@ -107,6 +104,7 @@ public class SecurityConfiguration {
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("utf-8");
+        System.out.println(request.getSession().getId());
         response.getWriter().write(JSONObject.toJSONString(RestBean.success("登陆成功")));
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
@@ -123,6 +121,7 @@ public class SecurityConfiguration {
     }
 
     public void logoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        System.out.println(request.getSession().getId());
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.success("退出登录")));
     }

@@ -15,8 +15,8 @@ public interface UserMapper {
     int createAccount(String username,String policeId, String policeStation,String password,String email);
     @Update("update db_account set password = #{password} where email = #{email}")
     int resetPasswordByEmail(String password,String email);
-    @Select("select * from db_account where username = #{text} or email = #{text}")
-    AccountUser findAccountUserByNameOrEmail(String text);
+    @Select("select * from db_account where username = #{text} or email = #{text} or police_id = #{text}")
+    AccountUser findAccountUserByNameOrEmailOrPoliceId(String text);
     @Update("update db_account set is_login = 1 where id = #{id}")
     void login(int id);
 

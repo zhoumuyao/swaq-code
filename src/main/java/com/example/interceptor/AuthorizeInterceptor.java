@@ -28,6 +28,9 @@ public class AuthorizeInterceptor implements HandlerInterceptor {
 //        String username = user.getUsername();
 //        AccountUser account = mapper.findAccountUserByNameOrEmail(username);
 //        request.getSession().setAttribute("account",account);
+        response.setHeader("Access-Control-Expose-Headers", "token");// 服务器 headers 白名单，可以让客户端进行访问操作的属性
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         return true;
     }
 }
