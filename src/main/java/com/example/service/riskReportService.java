@@ -4,4 +4,6 @@ import java.io.File;
 
 public interface riskReportService {
     File outRiskReport(int id);
+
+    byte[] outReport(int id);
 }
