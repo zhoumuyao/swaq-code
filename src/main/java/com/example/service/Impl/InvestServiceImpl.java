@@ -64,7 +64,7 @@ public class InvestServiceImpl implements InvestService {
 
     @Override
     public String deleteHandlePerson(int id) {
-        if(investMapper.deleteHandleEquipment(id) <= 0){
+        if(investMapper.deleteHandlePerson(id) <= 0){
             return null;
         }
         return "删除成功";

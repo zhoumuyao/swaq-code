@@ -2,12 +2,15 @@ package com.example.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.example.entity.Invest;
+import com.example.entity.InvestVo;
 import com.example.entity.RestBean;
 import com.example.service.InvestService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("api/invest")
@@ -16,10 +19,22 @@ public class InvestController {
     @Resource
     InvestService investService;
     @PostMapping("createInvest")
-    public RestBean<String> createInfo(@RequestBody Invest invest){
-        System.out.println(invest);
-        invest.setGather(invest.getGather().toString());
-        invest.setPersonelDensity(invest.getPersonelDensity().toString());
+    public RestBean<String> createInfo(@RequestBody InvestVo investVo){
+        Invest invest = new Invest();
+        System.out.println(investVo);
+        invest.setGather(investVo.getGather().toString());
+        invest.setPersonelDensity(investVo.getPersonelDensity().toString());
+        invest.setDate(LocalDate.parse(investVo.getDate()));
+        invest.setTime(LocalTime.parse(investVo.getTime()));
+        invest.setId(investVo.getId());
+        invest.setHumi(investVo.getHumi());
+        invest.setSoil(investVo.getSoil());
+        invest.setWater(investVo.getWater());
+        invest.setAirQuality(investVo.getAirQuality());
+        invest.setTemperature(investVo.getTemperature());
+        invest.setPersonelDensity(investVo.getPersonelDensity());
+        invest.setWindDirection(investVo.getWindDirection());
+        invest.setWeather(investVo.getWeather());
         String res = investService.createInvest(invest);
         return RestBean.success(res);
     }
