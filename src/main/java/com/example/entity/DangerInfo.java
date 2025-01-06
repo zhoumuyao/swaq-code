@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class DangerInfo {
 
+    int caseId;
+
     int id;
 
     String features;
@@ -14,5 +16,11 @@ public class DangerInfo {
     String dna;
 
     String intro;
+
+    String transmissionRoute;
+
+    String transmissionRange;
+
+    String activity;
 
 }
