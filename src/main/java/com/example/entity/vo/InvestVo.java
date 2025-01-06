@@ -11,12 +11,12 @@ import java.time.LocalTime;
 import java.util.Date;
 
 @Data
-public class Invest {
+public class InvestVo {
     int id;
 
-    LocalDate date;
+    String date;
 
-    LocalTime time;
+    String time;
 
     String airQuality;
 
@@ -45,11 +45,11 @@ public class Invest {
 
 
     String gather;
-//    @Setter
+    //    @Setter
     public void setGather(Object gatherObject) {
         this.gather = JSON.toJSONString(gatherObject); // 将对象序列化为 JSON 字符串
     }
-//    @Getter
+    //    @Getter
     public Object getGather() {
         return JSON.parse(this.gather); // 将 JSON 字符串反序列化为 Java 对象
     }

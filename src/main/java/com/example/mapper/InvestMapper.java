@@ -26,7 +26,7 @@ public interface InvestMapper {
     int addHandleEquipment(int id, int equipmentId);
 
     @Delete("delete from db_person_handle where hid = #{id}")
-    int deletePerson(int id);
+    int deleteHandlePerson(int id);
 
     @Delete("delete from db_equipment_handle where hid = #{id}")
     int deleteHandleEquipment(int id);
