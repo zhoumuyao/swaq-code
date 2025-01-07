@@ -1,8 +1,8 @@
 package com.example.service.Impl;
 
 import com.example.entity.*;
+import com.example.mapper.CaseMapper;
 import com.example.mapper.DisposalMapper;
-import com.example.mapper.ReportMapper;
 import com.example.mapper.RiskMapper;
 import com.example.service.riskReportService;
 import com.itextpdf.awt.AsianFontMapper;
@@ -24,7 +24,7 @@ import java.util.Set;
 @Service
 public class riskReportServiceImpl implements riskReportService {
     @Resource
-    private ReportMapper mapper;
+    private CaseMapper caseMapper;
 
     @Resource
     private RiskMapper riskMapper;
@@ -86,7 +86,7 @@ public class riskReportServiceImpl implements riskReportService {
 
             // 6. 添加【二、生物安全案事件风险评估】
             java.util.List<DisposalObject> disposalObjects = disposalMapper.searchDisposal(id);
-            BiologicalCase risk_info = mapper.select_caseById(id);
+            Risk risk_info = riskMapper.selectRiskPlan(id);
             int[] riskPersons = riskMapper.selectRiskPerson(id);
             int[] riskEquipments = riskMapper.selectRiskEquipment(id);
             java.util.List<Person> listRiskPerson = riskMapper.selectPersonList();
@@ -225,7 +225,7 @@ public class riskReportServiceImpl implements riskReportService {
             document.add(contentParagraph);
 
             // 5. 添加【一、生物安全案事件基本信息】
-            BiologicalCase case_info = mapper.select_caseById(id);
+            BiologicalCase case_info = caseMapper.selectCase(id);
             String[] case_info_titles = {
                     String.format("1、案件号：%s", case_info.getId()),
                     String.format("2、时间：%s %s", case_info.getDate(), case_info.getTime()),
@@ -245,7 +245,7 @@ public class riskReportServiceImpl implements riskReportService {
 
             // 6. 添加【二、生物安全案事件风险评估】
             List<DisposalObject> disposalObjects = disposalMapper.searchDisposal(id);
-            BiologicalCase risk_info = mapper.select_caseById(id);
+            Risk risk_info = riskMapper.selectRiskPlan(id);
             int[] riskPersons = riskMapper.selectRiskPerson(id);
             int[] riskEquipments = riskMapper.selectRiskEquipment(id);
             List<Person> listRiskPerson = riskMapper.selectPersonList();

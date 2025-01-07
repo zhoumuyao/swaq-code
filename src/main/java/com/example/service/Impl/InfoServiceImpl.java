@@ -1,36 +1,20 @@
 package com.example.service.Impl;
 
 import com.example.entity.Info;
-import com.example.entity.Invest;
 import com.example.mapper.InfoMapper;
-import com.example.mapper.ReportMapper;
 import com.example.service.InfoService;
 import com.example.util.imageUtil;
-import com.itextpdf.awt.AsianFontMapper;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class InfoServiceImpl implements InfoService {
-    @Resource
-    private ReportMapper mapper;
     @Resource
     InfoMapper infoMapper;
 

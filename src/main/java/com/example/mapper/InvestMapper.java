@@ -32,8 +32,14 @@ public interface InvestMapper {
     int deleteHandleEquipment(int id);
 
     @Select("SELECT pid from db_person_handle where hid = #{hid}")
-    int[] selectHandlePerson(int rid);
+    int[] selectHandlePerson(int hid);
 
     @Select("SELECT eid from db_equipment_handle where hid = #{hid}")
-    int[] selectHandleEquipment(int rid);
+    int[] selectHandleEquipment(int hid);
+
+    @Select("SELECT name from db_person where id = #{pid}")
+    String selectHandlePersonName(int pid);
+
+    @Select("SELECT name from db_equipment where id = #{eid}")
+    String selectHandleEquipmentName(int eid);
 }

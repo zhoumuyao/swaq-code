@@ -2,12 +2,14 @@ package com.example.service.Impl;
 import com.example.entity.*;
 import com.example.mapper.DisposalMapper;
 import com.example.mapper.RiskMapper;
+import com.example.mapper.InvestMapper;
+import com.example.mapper.CaseMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import com.example.mapper.ReportMapper;
 import com.example.service.ReportService;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -26,10 +28,13 @@ import java.io.ByteArrayOutputStream;
 @Service
 public class ReportServiceImpl implements ReportService {
     @Resource
-    private ReportMapper mapper;
+    private CaseMapper caseMapper;
 
     @Resource
     private RiskMapper riskMapper;
+
+    @Resource
+    private InvestMapper investMapper;
 
     @Resource
     DisposalMapper disposalMapper;
@@ -76,7 +81,7 @@ public class ReportServiceImpl implements ReportService {
             BaseFont baseFont = BaseFont.createFont(AsianFontMapper.ChineseSimplifiedFont, AsianFontMapper.ChineseSimplifiedEncoding_H, BaseFont.NOT_EMBEDDED);
             // 文档标题对应的样式 参数1：相当于字体（宋体） 参数2：字体大小 参数3：是否加粗，斜体 参数4：字体颜色
             Font headerFont = new Font(baseFont, 30, Font.NORMAL, BaseColor.BLACK);
-            // headerParagraph  文档标题
+            // headerParagraph 文档标题
             Paragraph headerParagraph = new Paragraph("生物安全案事件处置报告", headerFont);
             ///文字居中
             headerParagraph.setAlignment(Paragraph.ALIGN_CENTER);
@@ -85,6 +90,7 @@ public class ReportServiceImpl implements ReportService {
 
 
             // 4. 添加报告导出日期
+            Font titleFont = new Font(baseFont, 15, Font.BOLD, BaseColor.BLACK);
             Font contentFont = new Font(baseFont, 15, Font.NORMAL, BaseColor.BLACK);
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
@@ -96,15 +102,16 @@ public class ReportServiceImpl implements ReportService {
             document.add(contentParagraph);
 
             // 5. 添加【一、生物安全案事件基本信息】
-            BiologicalCase case_info = mapper.select_caseById(id);
+            BiologicalCase case_info = caseMapper.selectCase(id);
             String[] case_info_titles = {
                     String.format("1、案件号：%s", case_info.getId()),
                     String.format("2、时间：%s %s", case_info.getDate(), case_info.getTime()),
                     String.format("3、地点：%s%s%s%s", case_info.getProvince(), case_info.getCountry(), case_info.getUrban(), case_info.getDescription()),
-                    String.format("4、现场情况：(%s, %s)", case_info.getLongitude(), case_info.getLatitude()),
+                    "4、现场情况：",
+                    String.format("伤员人数：%s， 症状信息：%s，影响范围：%s", case_info.getCasualties(), case_info.getSymptomMessage(), case_info.getInfluenceScope()),
             };
             // 添加标题段落
-            Paragraph title = new Paragraph("一、生物安全案事件基本信息\n", contentFont);
+            Paragraph title = new Paragraph("一、生物安全案事件基本信息\n", titleFont);
             title.setSpacingBefore(15);
             document.add(title);
             // 循环添加子段落
@@ -116,7 +123,7 @@ public class ReportServiceImpl implements ReportService {
 
             // 6. 添加【二、生物安全案事件风险评估】
             List<DisposalObject> disposalObjects = disposalMapper.searchDisposal(id);
-            BiologicalCase risk_info = mapper.select_caseById(id);
+            Risk risk_info = riskMapper.selectRiskPlan(id);
             int[] riskPersons = riskMapper.selectRiskPerson(id);
             int[] riskEquipments = riskMapper.selectRiskEquipment(id);
             List<Person> listRiskPerson = riskMapper.selectPersonList();
@@ -152,13 +159,6 @@ public class ReportServiceImpl implements ReportService {
             }
 
             StringBuilder disposalString = new StringBuilder("5、样本信息：");
-            if(!disposalObjects.isEmpty()){
-                for (DisposalObject disposalObject : disposalObjects){
-                    disposalString.append("采样种类：").append(disposalObject.getObjectClass()).append("  采样内容：").append(disposalObject.getSampleContent());
-                    disposalString.append("  快检方法：").append(disposalObject.getTestMethod()).append("  快检结果：").append(disposalObject.getResult());
-                    disposalString.append("  检测概率：").append(disposalObject.getProbability()).append("  采样要求：").append(disposalObject.getSampleRequirement()).append("\n");
-                }
-            }
 
             String[] risk_title = {
                     String.format("1、时间：%s %s", risk_info.getDate(), risk_info.getTime()),
@@ -168,7 +168,7 @@ public class ReportServiceImpl implements ReportService {
                     String.format("%s", disposalString),
             };
             // 添加标题段落
-            title = new Paragraph("二、生物安全案事件风险评估\n", contentFont);
+            title = new Paragraph("二、生物安全案事件风险评估\n", titleFont);
             title.setSpacingBefore(15);
             document.add(title);
             // 循环添加子段落
@@ -177,18 +177,76 @@ public class ReportServiceImpl implements ReportService {
                 item.setSpacingBefore(5); // 设置段落间距
                 document.add(item);
             }
+            // 创建一个7列的表格
+            PdfPTable table1 = new PdfPTable(7);
+            // 设置表格宽度为100%，与前面间隔为5
+            table1.setWidthPercentage(100);
+            table1.setSpacingBefore(5);
+            // 设置列宽（可选，根据需要自定义列宽）
+            float[] table1_Widths = new float[]{0.5F, 1, 1, 2, 1, 1, 1};
+            table1.setWidths(table1_Widths);
+
+            // 定义表头和数据
+            String[][] table1_rows = {{"序号", "采样种类", "采样内容", "检验要求", "快检方法", "快检结果", "检验概率"}};
+
+            if(!disposalObjects.isEmpty()){
+                // 动态扩展二维数组以容纳数据
+                table1_rows = Arrays.copyOf(table1_rows, disposalObjects.size() + 1);
+
+                // 循环填充数据
+                for (int i = 0; i < disposalObjects.size(); i++) {
+                    DisposalObject disposalObject = disposalObjects.get(i);
+                    table1_rows[i + 1] = new String[]{
+                            String.valueOf(i + 1), // 序号，从 1 开始
+                            disposalObject.getObjectClass(), // 采样种类
+                            disposalObject.getSampleContent(), // 采样内容
+                            disposalObject.getSampleRequirement(), // 检验要求
+                            disposalObject.getTestMethod(), // 快检方法
+                            disposalObject.getResult(), // 快检结果
+                            disposalObject.getProbability() // 检验概率
+                    };
+                }
+            }
+
+            // 使用循环添加表格内容
+            for (String[] row : table1_rows) {
+                for (String cell : row) {
+                    table1.addCell(new Phrase(cell, contentFont)); // 使用 Phrase 添加内容
+                }
+            }
+            document.add(table1);
 
             // 7. 添加【三、生物安全案事件现场处置】
-            Invest handle_info = mapper.select_investById(id);
+            Invest handle_info = investMapper.queryInvest(id);
+            int[] handlePersons = investMapper.selectHandlePerson(id);
+            StringBuilder handlePersonsList = new StringBuilder();
+            for (int PersonId : handlePersons) {
+                String name = investMapper.selectHandlePersonName(PersonId);
+                if (handlePersonsList.length() > 0) {
+                    handlePersonsList.append(" ");
+                }
+                handlePersonsList.append(name);
+            }
+
+
+            int[] handleEquipments = investMapper.selectHandleEquipment(id);
+            StringBuilder handleEquipmentsList = new StringBuilder();
+            for(int EquipmentId : handleEquipments) {
+                String name = investMapper.selectHandleEquipmentName(EquipmentId);
+                if (handleEquipmentsList.length() > 0) {
+                    handleEquipmentsList.append(" ");
+                }
+                handleEquipmentsList.append(name);
+            }
+
             String[] handle_title = {
                     String.format("1、时间：%s %s", handle_info.getDate(), handle_info.getTime()),
                     String.format("2、地点：%s%s%s%s", case_info.getProvince(), case_info.getCountry(), case_info.getUrban(), case_info.getDescription()),
-                    String.format("3、人员：", "xxx、xx"),
-                    "4、装备：",
+                    String.format("3、人员：%s", handlePersonsList),
+                    String.format("4、装备：%s", handleEquipmentsList),
                     "5、现场信息记录：",
             };
-            // 添加标题段落
-            title = new Paragraph("三、生物安全案事件现场处置\n", contentFont);
+            title = new Paragraph("三、生物安全案事件现场处置\n", titleFont);
             title.setSpacingBefore(15);
             document.add(title);
             // 循环添加子段落
@@ -258,6 +316,36 @@ public class ReportServiceImpl implements ReportService {
             title.setSpacingBefore(5);
             document.add(title);
 
+            // 7. 添加【四、致死致伤检验鉴定】
+
+            title = new Paragraph("四、致死致伤检验鉴定\n", titleFont);
+            title.setSpacingBefore(15);
+            document.add(title);
+
+            title = new Paragraph("1、实验室检测结果：\n", contentFont);
+            title.setSpacingBefore(5);
+            document.add(title);
+
+            document.add(table1);
+
+            String[] identify_title = {
+                    "2、尸体检验报告：",
+                    "（1）基本情况：",
+                    "    委托人：",
+                    "    委托事项：",
+                    "    受理时间：",
+                    "    鉴定材料：",
+                    "    鉴定日期：",
+                    "    鉴定地点：",
+                    "    在场人员：",
+                    "    被鉴定人：",
+            };
+
+            for (String content : identify_title) {
+                Paragraph item = new Paragraph(content, contentFont);
+                item.setSpacingBefore(5); // 设置段落间距
+                document.add(item);
+            }
 
             title = new Paragraph("处理人员签字：\n", contentFont);
             title.setSpacingBefore(5);
