@@ -29,6 +29,7 @@ public class IdentifyController {
                                            @RequestParam String method,
                                            @RequestParam String result,
                                            @RequestParam String description,
+                                           @RequestParam String baseSequence,
                                            @RequestParam boolean judge,
                                            @RequestParam boolean isUpdate)
     {
@@ -42,6 +43,7 @@ public class IdentifyController {
         idetify.setResult(result);
         idetify.setMethod(method);
         idetify.setDescription(description);
+        idetify.setBaseSequence(baseSequence);
         idetify.setJudge(judge);
         String s;
         if(isUpdate){

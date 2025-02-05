@@ -9,11 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface IdentifyMapper {
-    @Insert("insert into db_identify (id, date, method, result, description, judge) " +
-            "values (#{id}, #{date}, #{method}, #{result}, #{description}, #{judge})")
+    @Insert("insert into db_identify (id, date, method, result, description, baseSequence, judge) " +
+            "values (#{id}, #{date}, #{method}, #{result}, #{description}, #{baseSequence}, #{judge})")
     int createIdentify(Identify identify);
 
-    @Update("update db_identify set method = #{method}, result = #{result}, description = #{description}, judge = #{judge} where id = #{id}")
+    @Update("update db_identify set method = #{method}, result = #{result}, description = #{description}, baseSequence = #{baseSequence}, judge = #{judge} where id = #{id}")
     int updateIdentify(Identify identify);
 
     @Insert("insert into db_person_identify_labs (pid, rid) values (#{personId}, #{id})")
@@ -43,15 +43,15 @@ public interface IdentifyMapper {
     @Select("SELECT * from db_person")
     List<Person> selectPersonList();
 
-    @Select("SELECT * from db_equipment")
+    @Select("SELECT * from db_equipment_labs")
     List<Equipment> selectEquipmentList();
 
     @Select("SELECT eid from db_equipment_identify where rid = #{rid}")
     int[] selectIdentifyEquipment(int id);
 
-    @Insert("insert into db_equipment_identify (eid, rid) values (#{equipmentId}, #{id})")
+    @Insert("insert into db_equipment_identify (rid, eid) values (#{id}, #{equipment})")
     int addIdentifyEquipment(int id, int equipment);
 
-    @Delete("delete from db_equipment_risk where rid = #{id}")
+    @Delete("delete from db_equipment_identify where rid = #{id}")
     int deleteIdentifyEquipment(int id);
 }

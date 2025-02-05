@@ -10,5 +10,6 @@ public class Identify {
     String method;
     String result;
     String description;
+    String baseSequence;
     boolean judge;
 }
