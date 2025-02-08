@@ -1,4 +1,4 @@
-package com.example.entity;
+package com.example.entity.vo;
 
 import com.alibaba.fastjson2.JSON;
 //import jdk.nashorn.internal.objects.annotations.Getter;

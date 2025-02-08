@@ -2,7 +2,7 @@ package com.example.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.example.entity.Invest;
-import com.example.entity.InvestVo;
+import com.example.entity.vo.InvestVo;
 import com.example.entity.RestBean;
 import com.example.service.InvestService;
 import org.springframework.web.bind.annotation.*;
