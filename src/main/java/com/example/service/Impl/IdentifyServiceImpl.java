@@ -1,5 +1,6 @@
 package com.example.service.Impl;
 
+import com.example.entity.Equipment;
 import com.example.entity.Identify;
 import com.example.entity.Person;
 import com.example.entity.Risk;
@@ -38,18 +39,33 @@ public class IdentifyServiceImpl implements IdentifyService {
         }
         return "修改成功";
     }
+
     @Override
-    public String addIdentifyPerson(int id, int[] persons){
+    public String addLabsPerson(int id, int[] persons){
         if(persons.length == 0){
             return null;
         }
         for (int person : persons) {
-            if(mapper.addIdentifyPerson(id, person) < 0){
+            if(mapper.addLabsPerson(id, person) < 0){
                 return null;
             }
         }
         return "添加成功";
     }
+
+    @Override
+    public String addAutopsyPerson(int id, int[] persons){
+        if(persons.length == 0){
+            return null;
+        }
+        for (int person : persons) {
+            if(mapper.addAutopsyPerson(id, person) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
     @Override
     public String addNewIdentifyPerson(int id, String name){
         if(mapper.addNewIdentifyPerson(id,name)<0){
@@ -59,16 +75,29 @@ public class IdentifyServiceImpl implements IdentifyService {
     }
 
     @Override
-    public String deleteIdentifyPerson(int id){
-        if(mapper.deletePerson(id) <= 0){
+    public String deleteLabsPerson(int id){
+        if(mapper.deleteLabsPerson(id) <= 0){
             return null;
         }
         return "删除成功";
     }
 
     @Override
-    public int[] selectIdentifyPersons(int id){
-        return mapper.selectIdentifyPersons(id);
+    public String deleteAutopsyPerson(int id){
+        if(mapper.deleteAutopsyPerson(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public int[] selectLabsPersons(int id){
+        return mapper.selectLabsPersons(id);
+    }
+
+    @Override
+    public int[] selectAutopsyPersons(int id){
+        return mapper.selectAutopsyPersons(id);
     }
 
     @Override
@@ -85,5 +114,39 @@ public class IdentifyServiceImpl implements IdentifyService {
             return Collections.emptyList();
         }
         return mapper.selectPersonList();
+    }
+
+    @Override
+    public List<Equipment> searchEquipmentList(Equipment equipment) {
+        if(equipment.getId() < 0){
+            return Collections.emptyList();
+        }
+        return mapper.selectEquipmentList();
+    }
+
+    @Override
+    public String addIdentifyEquipment(int id, int[] equipments) {
+        if(equipments.length == 0){
+            return null;
+        }
+        for (int equipment : equipments) {
+            if(mapper.addIdentifyEquipment(id, equipment) < 0){
+                return null;
+            }
+        }
+        return "添加成功";
+    }
+
+    @Override
+    public String deleteIdentifyEquipment(int id) {
+        if(mapper.deleteIdentifyEquipment(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
+    public int[] select_identifyEquipment(int id) {
+        return mapper.selectIdentifyEquipment(id);
     }
 }

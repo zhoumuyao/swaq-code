@@ -1,9 +1,9 @@
 package com.example.controller;
 
+import com.example.entity.Equipment;
 import com.example.entity.Identify;
 import com.example.entity.Person;
 import com.example.entity.RestBean;
-import com.example.entity.Risk;
 import com.example.service.IdentifyService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +29,7 @@ public class IdentifyController {
                                            @RequestParam String method,
                                            @RequestParam String result,
                                            @RequestParam String description,
+                                           @RequestParam String baseSequence,
                                            @RequestParam boolean judge,
                                            @RequestParam boolean isUpdate)
     {
@@ -42,6 +43,7 @@ public class IdentifyController {
         idetify.setResult(result);
         idetify.setMethod(method);
         idetify.setDescription(description);
+        idetify.setBaseSequence(baseSequence);
         idetify.setJudge(judge);
         String s;
         if(isUpdate){
@@ -58,8 +60,21 @@ public class IdentifyController {
         return RestBean.success(s);
     }
 
-    @PostMapping("/add_identifyPerson")
-    public RestBean<String> addIdentifyPerson(@RequestParam int id,
+    @PostMapping("/add_labsPerson")
+    public RestBean<String> addLabsPerson(@RequestParam int id,
+                                             @RequestParam(value = "persons[]", required = false) int[] persons){
+        if(id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        if(persons == null){
+            return RestBean.failure(400, "请选中参与警务人员");
+        }
+        String s = service.addLabsPerson(id, persons);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/add_autopsyPerson")
+    public RestBean<String> addAutopsyPerson(@RequestParam int id,
                                               @RequestParam(value = "persons[]", required = false) int[] persons){
         if(id < 0){
             return RestBean.failure(400, "参数错误");
@@ -67,7 +82,7 @@ public class IdentifyController {
         if(persons == null){
             return RestBean.failure(400, "请选中参与警务人员");
         }
-        String s = service.addIdentifyPerson(id, persons);
+        String s = service.addAutopsyPerson(id, persons);
         return RestBean.success(s);
     }
 
@@ -82,22 +97,40 @@ public class IdentifyController {
 
     }
 
-    @PostMapping("/delete_identifyPerson")
-    public RestBean<String> deleteIdentifyPerson(@RequestParam int id){
+    @PostMapping("/delete_labsPerson")
+    public RestBean<String> deleteLabsPerson(@RequestParam int id){
         if (id < 0){
             return RestBean.failure(400, "参数错误");
         }
-        String s = service.deleteIdentifyPerson(id);
+        String s = service.deleteLabsPerson(id);
         return RestBean.success(s);
     }
 
-    @PostMapping("/select_identifyPerson")
-    public RestBean<int[]> selectIdentifyPersons(@RequestParam int id){
+    @PostMapping("/delete_autopsyPerson")
+    public RestBean<String> deleteAutopsyPerson(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        String s = service.deleteAutopsyPerson(id);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/select_labsPerson")
+    public RestBean<int[]> selectLabsPersons(@RequestParam int id){
         if (id < 0){
             return RestBean.failure(400, null);
         }
-        int[] riskPersons = service.selectIdentifyPersons(id);
-        return RestBean.success(riskPersons);
+        int[] labsPersons = service.selectLabsPersons(id);
+        return RestBean.success(labsPersons);
+    }
+
+    @PostMapping("/select_autopsyPerson")
+    public RestBean<int[]> selectAutopsyPersons(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, null);
+        }
+        int[] autopsyPersons = service.selectAutopsyPersons(id);
+        return RestBean.success(autopsyPersons);
     }
 
     @PostMapping("/select_Identify")
@@ -118,5 +151,46 @@ public class IdentifyController {
         List<Person> personList = service.searchPersonList(person);
         System.out.println("hello");
         return RestBean.success(personList);
+    }
+
+    @PostMapping("/select_equipment")
+    public RestBean<List<Equipment>> searchEquipmentList(@RequestParam(required = false, defaultValue = "0") int id,
+                                                         @RequestParam(required = false, defaultValue = "") String name){
+        Equipment equipment = new Equipment();
+        equipment.setId(id);
+        equipment.setName(name);
+        List<Equipment> equipmentList = service.searchEquipmentList(equipment);
+        return RestBean.success(equipmentList);
+    }
+
+    @PostMapping("/add_identifyEquipment")
+    public RestBean<String> addIdentifyEquipment(@RequestParam int id,
+                                             @RequestParam(value = "equipments[]", required = false) int[] equipments){
+        if(id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        if(equipments == null){
+            return RestBean.failure(400, "请选中使用设备");
+        }
+        String s = service.addIdentifyEquipment(id, equipments);
+        return RestBean.success(s);
+    }
+
+    @PostMapping("/select_identifyEquipment")
+    public RestBean<int[]> selectIdentifyEquipment(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, null);
+        }
+        int[] riskEquipments = service.select_identifyEquipment(id);
+        return RestBean.success(riskEquipments);
+    }
+
+    @PostMapping("/delete_identifyEquipment")
+    public RestBean<String> deleteIdentifyEquipment(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        String s = service.deleteIdentifyEquipment(id);
+        return RestBean.success(s);
     }
 }
