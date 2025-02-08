@@ -26,4 +26,5 @@ public class UserController {
         AccountUser accountUser = userService.searchInfo(username);
         return RestBean.success(accountUser);
     }
+
 }

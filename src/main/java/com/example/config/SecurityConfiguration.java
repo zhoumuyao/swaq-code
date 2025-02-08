@@ -3,6 +3,7 @@ package com.example.config;
 import com.alibaba.fastjson.JSONObject;
 import com.example.entity.RestBean;
 import com.example.service.AuthorizeService;
+import com.example.service.OnlineUserStatsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +37,8 @@ public class SecurityConfiguration {
 
     @Resource
     DataSource dataSource;
+    @Resource
+    OnlineUserStatsService onlineUserStatsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,PersistentTokenRepository tokenRepository) throws Exception {
@@ -111,6 +114,7 @@ public class SecurityConfiguration {
             if (principal instanceof UserDetails) {
                 UserDetails userDetails = (UserDetails) principal;
                 request.getSession().setAttribute("name",userDetails.getUsername());
+                request.getSession().setMaxInactiveInterval(3600);
             }
         }
     }

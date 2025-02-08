@@ -1,6 +1,7 @@
 package com.example.config;
 
 import com.example.interceptor.AuthorizeInterceptor;
+import com.example.interceptor.OnlineUserInterceptor;
 import com.example.listener.MySessionListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
@@ -18,9 +19,14 @@ public class WebConfiguration implements WebMvcConfigurer {
     private String uploadPath;
     @Resource
     AuthorizeInterceptor interceptor;
+
+    @Resource
+    OnlineUserInterceptor onlineUserInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(interceptor)
+                .addPathPatterns("/**");
+        registry.addInterceptor(onlineUserInterceptor)
                 .addPathPatterns("/**");
     }
     @Override

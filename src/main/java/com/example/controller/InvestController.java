@@ -35,6 +35,7 @@ public class InvestController {
         invest.setPersonelDensity(investVo.getPersonelDensity());
         invest.setWindDirection(investVo.getWindDirection());
         invest.setWeather(investVo.getWeather());
+        invest.setWindSpeed(investVo.getWindSpeed());
         String res = investService.createInvest(invest);
         return RestBean.success(res);
     }
