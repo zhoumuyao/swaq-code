@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/swaq?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
-    url: jdbc:mysql://192.10.84.130:3308/swaq?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/swaq?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    # url: jdbc:mysql://192.10.84.130:3308/swaq?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     username: root
     password: 123456
   mail:
@@ -18,8 +18,8 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
   redis:
     database: 0
-    host: 192.10.84.130
-    port: 6382
+    host: localhost
+    port: 6379
   web:
     resources:
       cache:
