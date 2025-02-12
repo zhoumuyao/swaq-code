@@ -14,8 +14,9 @@ public class OnlineUserInterceptor implements HandlerInterceptor {
     OnlineUserStatsService onlineUserStatsService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String username =(String) request.getSession().getAttribute("name");
-        onlineUserStatsService.online(username);
+//        String username =(String) request.getSession().getAttribute("name");
+        System.out.println("SessionId:" + request.getSession().getId());
+        onlineUserStatsService.online("admin");
         return true;
     }
 }

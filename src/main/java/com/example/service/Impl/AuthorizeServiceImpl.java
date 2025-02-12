@@ -3,6 +3,7 @@ package com.example.service.Impl;
 import com.example.entity.auth.Account;
 import com.example.mapper.UserMapper;
 import com.example.service.AuthorizeService;
+import com.example.service.OnlineUserStatsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
@@ -30,6 +31,9 @@ public class AuthorizeServiceImpl implements AuthorizeService {
 
     @Resource
     MailSender mailSender;
+
+    @Resource
+    OnlineUserStatsService onlineUserStatsService;
 
     @Resource
     StringRedisTemplate template;
@@ -150,10 +154,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     public void logout(String username) {
         if(username == null)
             throw new UsernameNotFoundException("用户名不能为空");
-        Account account = userMapper.findAccountByNameOrEmailOrPoliceId(username);
-        if (account == null)
-            return;
-        userMapper.logout(account.getId());
+        onlineUserStatsService.clear(username);
     }
 
     @Override

@@ -115,6 +115,7 @@ public class SecurityConfiguration {
                 UserDetails userDetails = (UserDetails) principal;
                 request.getSession().setAttribute("name",userDetails.getUsername());
                 request.getSession().setMaxInactiveInterval(3600);
+                onlineUserStatsService.online(userDetails.getUsername());
             }
         }
     }
@@ -125,7 +126,7 @@ public class SecurityConfiguration {
     }
 
     public void logoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        System.out.println(request.getSession().getId());
+//        System.out.println(request.getSession().getId());
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.success("退出登录")));
     }

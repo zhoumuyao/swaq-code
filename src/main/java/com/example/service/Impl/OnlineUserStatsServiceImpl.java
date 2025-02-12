@@ -42,4 +42,9 @@ public class OnlineUserStatsServiceImpl implements OnlineUserStatsService {
         return stringRedisTemplate.opsForZSet().removeRangeByScore(ONLINE_USERS, 0,
                 LocalDateTime.now().minus(duration).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
+
+    @Override
+    public Long clear(String username) {
+        return stringRedisTemplate.opsForZSet().remove(ONLINE_USERS, username);
+    }
 }

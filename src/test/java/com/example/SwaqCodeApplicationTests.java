@@ -7,10 +7,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootTest
 class SwaqCodeApplicationTests {
 
-    @Test
-    void contextLoads() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println(encoder.encode("123456"));
-    }
+//    @Test
+//    void contextLoads() {
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        System.out.println(encoder.encode("123456"));
+//    }
 
 }

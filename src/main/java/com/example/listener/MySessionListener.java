@@ -14,27 +14,4 @@ import javax.servlet.http.HttpSessionListener;
 public class MySessionListener implements HttpSessionListener {
 
     private AuthorizeService authorizeService;
-
-    @Override
-    public void sessionCreated(HttpSessionEvent se) {
-        // Session创建时的逻辑
-        System.out.println("Session Created: " + se.getSession().getAttribute("name") + se.getSession().getId());
-    }
-
-    @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-        // Session销毁时的逻辑
-        System.out.println("Session Destroyed: " + se.getSession().getAttribute("name"));
-        // 从在线用户列表中移除用户
-        if (se.getSession().getAttribute("name") != null){
-            Object name = se.getSession().getAttribute("name");
-            ServletContext sc = se.getSession().getServletContext();
-            ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
-            AuthorizeService authorizeService = applicationContext.getBean(AuthorizeService.class);
-            // 检查authorizeService是否为null
-            authorizeService.logout(name.toString());
-        }
-
-    }
-
 }

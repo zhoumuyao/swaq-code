@@ -31,4 +31,6 @@ public interface OnlineUserStatsService {
      */
     Long clear(Duration duration);
 
+
+    Long clear(String username);
 }
