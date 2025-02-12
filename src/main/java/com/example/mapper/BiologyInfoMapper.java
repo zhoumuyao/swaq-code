@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface BiologyInfoMapper {
 
-    @Select("select * from biologyInfo where dangerName = #{dangerName}")
+    @Select("select * from biologyinfo where dangerName = #{dangerName}")
     BiologyInfo searchInfo(String dangerName);
 }
