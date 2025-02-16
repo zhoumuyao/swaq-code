@@ -23,11 +23,12 @@ public class IdentifyController {
     @Resource
     IdentifyService service;
 
-    @PostMapping("/create_idetify")
+    @PostMapping("/create_identify")
     public RestBean<String> createIdentify(@RequestParam int id,
                                            @RequestParam String date,
                                            @RequestParam String method,
                                            @RequestParam String result,
+                                           @RequestParam String labResult,
                                            @RequestParam String description,
                                            @RequestParam String baseSequence,
                                            @RequestParam boolean judge,
@@ -41,6 +42,7 @@ public class IdentifyController {
         idetify.setId(id);
         idetify.setDate(LocalDate.parse(date));
         idetify.setResult(result);
+        idetify.setLabResult(labResult);
         idetify.setMethod(method);
         idetify.setDescription(description);
         idetify.setBaseSequence(baseSequence);
@@ -96,6 +98,17 @@ public class IdentifyController {
         return RestBean.success(s);
 
     }
+
+    //    @PostMapping("/add_newIdentifyEquipment")
+    //    public RestBean<String> addNewIdentifyEquipment(@RequestParam int id,
+    //                                                 @RequestParam String name){
+    //        Person person = new Person();
+    //        person.setId(id);
+    //        person.setName(name);
+    //        String s = service.addNewIdentifyPerson(id,name);
+    //        return RestBean.success(s);
+    //
+    //    }
 
     @PostMapping("/delete_labsPerson")
     public RestBean<String> deleteLabsPerson(@RequestParam int id){

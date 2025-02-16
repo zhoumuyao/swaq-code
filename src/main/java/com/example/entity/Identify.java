@@ -9,6 +9,7 @@ public class Identify {
     LocalDate date;
     String method;
     String result;
+    String labResult;
     String description;
     String baseSequence;
     boolean judge;
