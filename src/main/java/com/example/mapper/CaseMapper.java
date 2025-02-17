@@ -1,15 +1,15 @@
 package com.example.mapper;
 
 import com.example.entity.BiologicalCase;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface CaseMapper {
+
+    @Delete("DELETE FROM db_case WHERE id = #{id}")
+    Boolean deleteCase(int id);
 
     @Insert("insert into db_case (date, time, longitude, latitude, country, province, urban, description, casualties, symptom_message, influence_scope) " +
             "values (#{date}, #{time}, #{longitude}, #{latitude}, #{country}, #{province}, #{urban}, #{description}, #{casualties}, #{symptomMessage}, #{influenceScope})")

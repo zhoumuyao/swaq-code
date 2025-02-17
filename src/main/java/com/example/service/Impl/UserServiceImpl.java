@@ -25,5 +25,10 @@ public class UserServiceImpl implements UserService {
         return accountUser;
     }
 
+    @Override
+    public Long countRegisterNumber() {
+        return userMapper.countRegisterNumber();
+    }
+
 
 }

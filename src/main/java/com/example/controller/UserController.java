@@ -27,4 +27,13 @@ public class UserController {
         return RestBean.success(accountUser);
     }
 
+    @PostMapping("/register_number")
+    public RestBean<Long> registerNumber(){
+        Long number = userService.countRegisterNumber();
+        if(number >= 0)
+            return RestBean.success(number);
+        else
+            return RestBean.failure(400);
+    }
+
 }

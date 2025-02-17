@@ -30,6 +30,11 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
+    public Boolean deleteCase(int id) {
+        return caseMapper.deleteCase(id);
+    }
+
+    @Override
     public BiologicalCase selectCase(int id) {
         if(id < 0){
             return null;
