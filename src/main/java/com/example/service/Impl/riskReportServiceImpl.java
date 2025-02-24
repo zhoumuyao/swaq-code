@@ -4,6 +4,7 @@ import com.example.entity.*;
 import com.example.mapper.CaseMapper;
 import com.example.mapper.DisposalMapper;
 import com.example.mapper.RiskMapper;
+import com.example.service.BiologyInfoService;
 import com.example.service.riskReportService;
 import com.itextpdf.awt.AsianFontMapper;
 import com.itextpdf.text.*;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -31,6 +33,9 @@ public class riskReportServiceImpl implements riskReportService {
 
     @Resource
     DisposalMapper disposalMapper;
+
+    @Resource
+    BiologyInfoService biologyInfoService;
     /**
      * 新增报告
      */
@@ -306,6 +311,46 @@ public class riskReportServiceImpl implements riskReportService {
                 item.setSpacingBefore(5); // 设置段落间距
                 document.add(item);
             }
+
+            //【三、生物安全案事件风险评价】
+            BiologyInfo biologyInfo = biologyInfoService.searchInfo(disposalObjects.get(0).getResult());
+            String riskLevel;
+            if(Objects.equals(biologyInfo.getDiseasesClass(), "甲类")){
+                riskLevel="一级生物风险";
+            } else if (Objects.equals(biologyInfo.getDiseasesClass(), "乙类")) {
+                riskLevel="二级生物风险";
+            } else if (Objects.equals(biologyInfo.getDiseasesClass(), "丙类")) {
+                riskLevel="三级生物风险";
+            }else {
+                riskLevel="无明确生物风险";
+            }
+            String mergeResponse;
+            if(Objects.equals(biologyInfo.getInfectious(), "一级")){
+                mergeResponse="高";
+            } else if (Objects.equals(biologyInfo.getInfectious(), "二级")) {
+                mergeResponse="中";
+            } else {
+                mergeResponse="低";
+            }
+
+            String[] biology_info_titles = {
+                    String.format("1、风险等级：%s", riskLevel),
+                    String.format("2、应急响应机制：%s", mergeResponse),
+                    String.format("3、病原性：%s", biologyInfo.getPathogenicity()),
+                    String.format("4、致死率：%s", biologyInfo.getToxicity()),
+                    String.format("5、处置方法：%s", biologyInfo.getDisposal()),
+            };
+            // 添加标题段落
+            title = new Paragraph("三、生物安全案事件风险评价\n", contentFont);
+            title.setSpacingBefore(15);
+            document.add(title);
+            // 循环添加子段落
+            for (String content : biology_info_titles) {
+                Paragraph item = new Paragraph(content, contentFont);
+                item.setSpacingBefore(5); // 设置段落间距
+                document.add(item);
+            }
+
 
             // x. 添加文件日期
             String Date ="日期：     年    月    日";

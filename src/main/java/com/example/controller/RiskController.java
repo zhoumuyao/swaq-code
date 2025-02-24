@@ -166,6 +166,14 @@ public class RiskController {
         String s = service.addNewEquipment(equipment);
         return RestBean.success(s);
     }
+    @PostMapping("/delete_riskPersonById")
+    public RestBean<String> deleteRiskPersonById(@RequestParam int id){
+        if (id < 0){
+            return RestBean.failure(400, "参数错误");
+        }
+        String s = service.deleteRiskPersonById(id);
+        return RestBean.success(s);
+    }
 
     @PostMapping("/delete_riskPerson")
     public RestBean<String> deleteRiskPerson(@RequestParam int id){
@@ -232,6 +240,17 @@ public class RiskController {
         List<Equipment> equipmentList = service.searchEquipmentList(equipment);
         return RestBean.success(equipmentList);
     }
+
+    @PostMapping("/select_personById")
+    public RestBean<List<Person>> selectPersonById(@RequestParam int id){
+
+        List<Person> person = service.selectPersonById(id);
+        if(person == null) {
+            return RestBean.failure(400, null);
+        }
+        return RestBean.success(person);
+    }
+
 
     @PostMapping("/upload")
     public Map<String, String> uploadFile(@RequestParam("file") MultipartFile file) {

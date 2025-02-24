@@ -20,7 +20,7 @@ public class DisposalController {
     DisposalService disposalService;
 
     @PostMapping("/add_disposal")
-    public RestBean<Integer> addDisposal(
+    public RestBean<String> addDisposal(
                                         @RequestParam Integer id,
                                         @RequestParam String objectClass,
                                         @RequestParam String sampleType,
@@ -30,7 +30,7 @@ public class DisposalController {
                                         @RequestParam String probability,
                                         @RequestParam String sampleRequirement){
         if(StringUtils.isAnyBlank(objectClass,sampleType,result,testMethod, sampleContent) || id<0 ){
-            return RestBean.failure(400);
+            return RestBean.failure(400,"请完整填写参数");
         }
         DisposalObject disposalObject = new DisposalObject();
 //        disposalObject.setDisposalId(disposalId);
@@ -45,9 +45,9 @@ public class DisposalController {
 
         Integer disposalID = disposalService.addDisposal(disposalObject);
         if(disposalID == null){
-            return RestBean.failure(404);
+            return RestBean.failure(404,"添加失败");
         }
-        return RestBean.success(disposalID);
+        return RestBean.success("添加成功");
     }
 
     @PostMapping("/search_disposal")

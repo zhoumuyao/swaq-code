@@ -31,6 +31,9 @@ public interface RiskMapper {
     @Insert("insert into db_equipment_risk (eid, rid) values (#{equipmentId}, #{id})")
     int addRiskEquipment(int id, int equipmentId);
 
+    @Delete("delete from db_person_risk where pid = #{id}")
+    int deleteRiskPerson(int id);
+
     @Delete("delete from db_person_risk where rid = #{id}")
     int deletePerson(int id);
 
@@ -51,6 +54,9 @@ public interface RiskMapper {
 
     @Select("SELECT * from db_equipment")
     List<Equipment> selectEquipmentList();
+
+    @Select("SELECT * from db_person where id = #{id}")
+    List<Person> selectPersonById(int id);
 
     @Insert("insert into db_fileUpload (fileName,fileUrl) values (#{fileName},#{fileUrl})")
     void insertFile(FileUpload fileUpload);

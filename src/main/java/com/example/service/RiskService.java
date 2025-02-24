@@ -19,6 +19,8 @@ public interface RiskService {
 
     String addNewEquipment(Equipment equipment);
 
+    String deleteRiskPersonById(int id);
+
     String deleteRiskPerson(int id);
 
     String deleteRiskEquipment(int id);
@@ -34,6 +36,8 @@ public interface RiskService {
     List<Person> searchPersonList(Person person);
 
     List<Equipment> searchEquipmentList(Equipment equipment);
+
+    List<Person> selectPersonById(int id);
 
     // 保存文件记录到数据库
     void saveFileRecord(FileUpload fileUpload);

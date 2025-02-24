@@ -92,6 +92,14 @@ public class RiskServiceImpl implements RiskService {
     }
 
     @Override
+    public String deleteRiskPersonById(int id) {
+        if(mapper.deleteRiskPerson(id) <= 0){
+            return null;
+        }
+        return "删除成功";
+    }
+
+    @Override
     public String deleteRiskPerson(int id) {
         if(mapper.deletePerson(id) <= 0){
             return null;
@@ -150,6 +158,14 @@ public class RiskServiceImpl implements RiskService {
             return Collections.emptyList();
         }
         return mapper.selectEquipmentList();
+    }
+
+    @Override
+    public List<Person> selectPersonById(int id) {
+        if(id < 0){
+            return Collections.emptyList();
+        }
+        return mapper.selectPersonById(id);
     }
 
     // 插入文件记录
