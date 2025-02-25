@@ -1,9 +1,6 @@
 package com.example.service.Impl;
 import com.example.entity.*;
-import com.example.mapper.DisposalMapper;
-import com.example.mapper.RiskMapper;
-import com.example.mapper.InvestMapper;
-import com.example.mapper.CaseMapper;
+import com.example.mapper.*;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
@@ -37,6 +34,9 @@ public class ReportServiceImpl implements ReportService {
     private InvestMapper investMapper;
 
     @Resource
+    private IdentifyMapper identifyMapper;
+
+    @Resource
     DisposalMapper disposalMapper;
 
     /**
@@ -44,6 +44,14 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public byte[] outReport(int id){
+        Invest handle_info = investMapper.queryInvest(id);
+        BiologicalCase case_info = caseMapper.selectCase(id);
+        Risk risk_info = riskMapper.selectRiskPlan(id);
+        Identify identify_info = identifyMapper.selectIdentify(id);
+        if(handle_info == null || case_info == null || risk_info == null || identify_info == null){
+            System.out.println("案件流程不完整，不能生成报告");
+            return new byte[0];
+        }
         // 输出文件
         File outFile = null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -66,6 +74,7 @@ public class ReportServiceImpl implements ReportService {
             //  if (!outFile.getParentFile().exists()) {
             //      outFile.getParentFile().mkdirs();
             //   }
+
             FileOutputStream outputStream = new FileOutputStream(outFile);
             Rectangle rectangle = new Rectangle(PageSize.A4);
 
@@ -102,7 +111,6 @@ public class ReportServiceImpl implements ReportService {
             document.add(contentParagraph);
 
             // 5. 添加【一、生物安全案事件基本信息】
-            BiologicalCase case_info = caseMapper.selectCase(id);
             String[] case_info_titles = {
                     String.format("1、案件号：%s", case_info.getId()),
                     String.format("2、时间：%s %s", case_info.getDate(), case_info.getTime()),
@@ -123,7 +131,6 @@ public class ReportServiceImpl implements ReportService {
 
             // 6. 添加【二、生物安全案事件风险评估】
             List<DisposalObject> disposalObjects = disposalMapper.searchDisposal(id);
-            Risk risk_info = riskMapper.selectRiskPlan(id);
             int[] riskPersons = riskMapper.selectRiskPerson(id);
             int[] riskEquipments = riskMapper.selectRiskEquipment(id);
             List<Person> listRiskPerson = riskMapper.selectPersonList();
@@ -217,7 +224,6 @@ public class ReportServiceImpl implements ReportService {
             document.add(table1);
 
             // 7. 添加【三、生物安全案事件现场处置】
-            Invest handle_info = investMapper.queryInvest(id);
             int[] handlePersons = investMapper.selectHandlePerson(id);
             StringBuilder handlePersonsList = new StringBuilder();
             for (int PersonId : handlePersons) {
@@ -317,12 +323,15 @@ public class ReportServiceImpl implements ReportService {
             document.add(title);
 
             // 7. 添加【四、致死致伤检验鉴定】
-
             title = new Paragraph("四、致死致伤检验鉴定\n", titleFont);
             title.setSpacingBefore(15);
             document.add(title);
 
             title = new Paragraph("1、实验室检测结果：\n", contentFont);
+            title.setSpacingBefore(5);
+            document.add(title);
+
+            title = new Paragraph(identify_info.getLabResult(), contentFont);
             title.setSpacingBefore(5);
             document.add(title);
 
@@ -335,7 +344,7 @@ public class ReportServiceImpl implements ReportService {
                     "    委托事项：",
                     "    受理时间：",
                     "    鉴定材料：",
-                    "    鉴定日期：",
+                    String.format("    鉴定日期：%s", handle_info.getDate()),
                     "    鉴定地点：",
                     "    在场人员：",
                     "    被鉴定人：",

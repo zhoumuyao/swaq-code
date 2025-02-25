@@ -9,11 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface IdentifyMapper {
-    @Insert("insert into db_identify (id, date, method, result, description, baseSequence, judge) " +
-            "values (#{id}, #{date}, #{method}, #{result}, #{description}, #{baseSequence}, #{judge})")
+    @Insert("insert into db_identify (id, date, method, result, labResult, description, baseSequence, judge) " +
+            "values (#{id}, #{date}, #{method}, #{result}, #{labResult}, #{description}, #{baseSequence}, #{judge})")
     int createIdentify(Identify identify);
 
-    @Update("update db_identify set method = #{method}, result = #{result}, description = #{description}, baseSequence = #{baseSequence}, judge = #{judge} where id = #{id}")
+    @Update("update db_identify set method = #{method}, result = #{result}, labResult = #{labResult}, description = #{description}, baseSequence = #{baseSequence}, judge = #{judge} where id = #{id}")
     int updateIdentify(Identify identify);
 
     @Insert("insert into db_person_identify_labs (pid, rid) values (#{personId}, #{id})")

@@ -4,4 +4,6 @@ import com.example.entity.user.AccountUser;
 
 public interface UserService {
     AccountUser searchInfo(String username);
+
+    Long countRegisterNumber();
 }

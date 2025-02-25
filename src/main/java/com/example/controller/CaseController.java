@@ -56,6 +56,8 @@ public class CaseController {
     @PostMapping("/search_case")
     public RestBean<BiologicalCase> searchCase(@RequestParam int id){
         BiologicalCase biologicalCase = service.selectCase(id);
+        if(biologicalCase == null)
+            return RestBean.failure(400);
         return RestBean.success(biologicalCase);
     }
 
@@ -64,5 +66,14 @@ public class CaseController {
         //调用service查询案例数据
         List<BiologicalCase> biologicalCaseList = service.searchAllCase();
         return RestBean.success(biologicalCaseList);
+    }
+
+    @PostMapping("/delete_case")
+    public RestBean<String> deleteCase(@RequestParam int id){
+        Boolean isDelete = service.deleteCase(id);
+        if(isDelete)
+            return RestBean.success("删除成功");
+        else
+            return RestBean.failure(400, "删除失败");
     }
 }

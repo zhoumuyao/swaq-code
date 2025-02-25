@@ -9,6 +9,10 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface UserMapper {
+
+    @Select("SELECT COUNT(*) FROM db_account;")
+    Long countRegisterNumber();
+
     @Select("select * from db_account where username = #{text} or email = #{text} or police_id = #{text}")
     Account findAccountByNameOrEmailOrPoliceId(String text);
     @Insert("insert into db_account (username,police_id,police_station,password,email)values (#{username},#{policeId},#{policeStation},#{password},#{email})")

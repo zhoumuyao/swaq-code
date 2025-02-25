@@ -22,6 +22,8 @@ public class IndexController {
     @Resource
     OnlineUserStatsService onlineUserStatsService;
 
+
+
     @Resource
     AuthorizeService authorizeService;
 
@@ -43,6 +45,8 @@ public class IndexController {
         authorizeService.logout(username);
         return RestBean.success("登出成功");
     }
+
+
 
 
 //    @PostMapping("/online_number")
